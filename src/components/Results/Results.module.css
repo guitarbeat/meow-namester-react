@@ -11,21 +11,58 @@
 }
 
 .header {
-  composes: cardInteractive from '../../styles/base.css';
-  position: relative;
-  z-index: var(--z-0);
-  padding: var(--space-6) var(--space-4);
-  margin-bottom: var(--space-8);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface-color);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
-.header h2 {
-  margin: 0 0 var(--space-4);
-  font-family: var(--font-serif);
-  font-size: var(--text-4xl);
+.header h1 {
+  font-size: var(--text-3xl);
   font-weight: 600;
   color: var(--text-primary);
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--surface-color);
+  border: 2px solid var(--primary-400);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.actionButton:hover {
+  color: white;
+  background: var(--primary-500);
+  border-color: var(--primary-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.actionButton:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.buttonIcon {
+  font-size: 1.2em;
 }
 
 .welcome {
@@ -102,11 +139,6 @@
 
 .startNewButton:hover {
   transform: translateY(-1px);
-}
-
-.buttonIcon {
-  width: 20px;
-  height: 20px;
 }
 
 .tip {
@@ -387,4 +419,23 @@
   border-radius: var(--radius-lg);
   animation: slideUp 0.3s var(--ease-out);
   z-index: 1000;
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
+    padding: var(--space-3);
+  }
+
+  .headerActions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .actionButton {
+    width: 100%;
+    justify-content: center;
+  }
 } 

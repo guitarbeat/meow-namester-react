@@ -1,7 +1,11 @@
 import React, { useEffect, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts';
 import styles from './Sidebar.module.css';
 
-const Sidebar = ({ view, setView, isLoggedIn, userName, onLogout, isOpen, onToggle }) => {
+const Sidebar = ({ currentPath, isOpen, onToggle }) => {
+  const { userName, isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
   const [isAnimating, setIsAnimating] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(false);
 
@@ -61,20 +65,24 @@ const Sidebar = ({ view, setView, isLoggedIn, userName, onLogout, isOpen, onTogg
     };
   }, [isOpen]);
 
+  const handleNavigation = (path) => {
+    navigate(path);
+    onToggle();
+  };
+
   return (
     <>
       <button 
-        className={`${styles.sidebarToggle} ${isOpen ? styles.open : ''}`}
+        className={styles.menuButton} 
         onClick={onToggle}
-        aria-label={isOpen ? "Close menu" : "Open menu"}
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
-        aria-controls="sidebar-menu"
-        aria-haspopup="true"
       >
-        <span className={styles.srOnly}>Toggle menu</span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
+        <div className={`${styles.hamburger} ${isOpen ? styles.open : ''}`}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </button>
       
       {/* Backdrop with improved animation support */}
@@ -88,39 +96,21 @@ const Sidebar = ({ view, setView, isLoggedIn, userName, onLogout, isOpen, onTogg
       )}
       
       <aside 
-        id="sidebar-menu"
-        className={`${styles.sidebar} ${isOpen ? styles.open : ''} ${isAnimating ? styles.animating : ''}`}
-        role="navigation"
-        aria-label="Main menu"
-        aria-hidden={!isOpen}
+        className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}
+        role="complementary"
+        aria-label="Navigation menu"
       >
         <div className={styles.sidebarHeader}>
-          <div className={styles.logoContainer}>
-            <img 
-              src={`${process.env.PUBLIC_URL}/images/cat.gif`} 
-              alt="Cat animation" 
-              className={styles.sidebarCatImage}
-              width="40"
-              height="40"
-            />
-            <h1 className={styles.appTitle}>Meow Namester</h1>
-          </div>
-          {isLoggedIn && (
-            <div className={styles.userInfo} role="status">
-              <span className={styles.userGreeting}>Welcome back</span>
-              <span className={styles.userName}>{userName}</span>
-            </div>
-          )}
+          <h2 className={styles.sidebarTitle}>
+            {isLoggedIn ? `Hi, ${userName}! 👋` : 'Welcome! 👋'}
+          </h2>
         </div>
         
         <nav className={styles.sidebarNav}>
           <button 
-            className={view === 'tournament' ? styles.active : styles.navButton}
-            onClick={() => {
-              setView('tournament');
-              onToggle();
-            }}
-            aria-current={view === 'tournament' ? 'page' : undefined}
+            className={currentPath === '/tournament' ? styles.active : styles.navButton}
+            onClick={() => handleNavigation('/tournament')}
+            aria-current={currentPath === '/tournament' ? 'page' : undefined}
           >
             <span className={styles.buttonIcon} aria-hidden="true">🏆</span>
             <span className={styles.buttonText}>Tournament</span>
@@ -129,12 +119,9 @@ const Sidebar = ({ view, setView, isLoggedIn, userName, onLogout, isOpen, onTogg
           {isLoggedIn && (
             <>
               <button 
-                className={view === 'profile' ? styles.active : styles.navButton}
-                onClick={() => {
-                  setView('profile');
-                  onToggle();
-                }}
-                aria-current={view === 'profile' ? 'page' : undefined}
+                className={currentPath === '/profile' ? styles.active : styles.navButton}
+                onClick={() => handleNavigation('/profile')}
+                aria-current={currentPath === '/profile' ? 'page' : undefined}
               >
                 <span className={styles.buttonIcon} aria-hidden="true">👤</span>
                 <span className={styles.buttonText}>My Profile</span>
@@ -148,8 +135,9 @@ const Sidebar = ({ view, setView, isLoggedIn, userName, onLogout, isOpen, onTogg
             <button 
               className={styles.logoutButton}
               onClick={() => {
-                onLogout();
+                logout();
                 onToggle();
+                navigate('/login');
               }}
             >
               <span className={styles.buttonIcon} aria-hidden="true">👋</span>

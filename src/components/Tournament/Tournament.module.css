@@ -17,11 +17,10 @@
 /* Layout & Container
    ========================================================================== */
 .tournament {
-  composes: container from '../../styles/base.css';
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: calc(100vh - var(--space-16));
   width: 100%;
   max-width: 1200px;
@@ -47,9 +46,6 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  transition: transform var(--duration-normal) var(--ease-out),
-              box-shadow var(--duration-normal) var(--ease-out);
-  will-change: transform, box-shadow;
 }
 
 .progressInfo:hover {
@@ -100,15 +96,12 @@
   width: 100%;
   max-width: 1000px;
   gap: var(--space-6);
-  composes: cardInteractive from '../../styles/base.css';
   padding: var(--space-6);
   background: var(--card-background);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  transition: all var(--duration-normal) var(--ease-out);
-  will-change: transform, box-shadow;
-  /* Improve touch target size on mobile */
-  min-height: 200px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-6);
 }
 
 .namesRow {
@@ -124,7 +117,6 @@
   max-width: 400px;
   min-width: 280px;
   transition: transform var(--duration-normal) var(--ease-out);
-  animation: fadeInSlide 0.5s ease-out;
 }
 
 .nameContainer.selected {
@@ -140,12 +132,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   background: var(--surface-color);
   border: 2px solid var(--border-color);
-  border-radius: var(--radius-full);
-  transition: all var(--duration-normal) var(--ease-out);
+  border-radius: 50%;
 }
 
 .vsText {
@@ -161,26 +152,29 @@
   gap: var(--space-4);
   width: 100%;
   max-width: 600px;
-  margin-top: var(--space-4);
 }
 
 .extraOptionsButton {
-  composes: btnSecondary from '../../styles/base.css';
-  min-width: 120px;
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
   transition: all var(--duration-normal) var(--ease-out);
+  min-width: 120px;
 }
 
 .extraOptionsButton:hover:not(:disabled) {
+  background: var(--surface-hover);
   transform: translateY(-1px);
 }
 
-.extraOptionsButton:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.selected {
-  composes: btnPrimary from '../../styles/base.css';
+.extraOptionsButton.selected {
   background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-600);
 }
 
 /* Controls & Buttons
@@ -295,25 +289,23 @@
 }
 
 .bracketToggle {
-  composes: btnSecondary from '../../styles/base.css';
-  width: 100%;
-  max-width: 800px;
-  margin: var(--space-4) auto;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
+  padding: var(--space-3) var(--space-6);
   background: var(--surface-color);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
   transition: all var(--duration-normal) var(--ease-out);
+  margin: var(--space-4) 0;
 }
 
 .bracketToggle:hover {
-  background: var(--card-hover);
+  background: var(--surface-hover);
   transform: translateY(-1px);
 }
 
@@ -327,14 +319,15 @@
 }
 
 .bracketView {
-  margin-top: var(--space-4);
+  width: 100%;
+  max-width: 1200px;
+  margin: var(--space-4) 0;
   padding: var(--space-4);
   background: var(--surface-color);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  animation: slideDown 0.3s var(--ease-out);
 }
 
 @keyframes slideDown {
@@ -528,93 +521,50 @@
 /* Dark Mode
    ========================================================================== */
 @media (prefers-color-scheme: dark) {
-  .vsSection {
-    background: rgb(var(--primary-rgb) / 0.2);
+  .tournament {
+    background: var(--background-dark);
   }
 
   .progressInfo,
-  .tournamentControls,
+  .matchup,
   .bracketView {
-    background: rgb(var(--black-rgb) / 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .matchup {
-    background: var(--card-background-dark);
+    background: var(--surface-dark);
     border-color: var(--border-color-dark);
   }
 
-  .modal {
-    background: var(--card-background-dark);
+  .vsSection {
+    background: var(--surface-dark);
+    border-color: var(--border-color-dark);
   }
 
-  /* Improve contrast in dark mode */
   .vsText {
     color: var(--primary-400);
   }
 
   .extraOptionsButton {
-    background: rgb(var(--black-rgb) / 0.3);
-  }
-
-  .soundControls {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .soundToggleButton {
     background: var(--surface-dark);
     border-color: var(--border-color-dark);
     color: var(--text-primary-dark);
   }
 
-  .soundToggleButton:hover:not(:disabled) {
-    background: var(--card-hover-dark);
-    border-color: var(--primary-400);
-    color: var(--primary-400);
+  .extraOptionsButton:hover:not(:disabled) {
+    background: var(--surface-hover-dark);
   }
 
-  .soundToggleButton.muted {
-    background: rgb(var(--error-rgb) / 0.15);
-    border-color: var(--error-400);
-    color: var(--error-400);
-  }
-
-  .soundToggleButton.muted:hover {
-    background: rgb(var(--error-rgb) / 0.2);
-    border-color: var(--error-300);
-    color: var(--error-300);
-  }
-
-  .soundToggleButton.error {
-    background: rgb(var(--error-rgb) / 0.15);
-    border-color: var(--error-400);
-    color: var(--error-400);
-  }
-
-  .trackInfo {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .trackName {
-    color: var(--text-primary-dark);
+  .extraOptionsButton.selected {
+    background: var(--primary-600);
+    color: white;
+    border-color: var(--primary-700);
   }
 
   .bracketToggle {
     background: var(--surface-dark);
     border-color: var(--border-color-dark);
-    color: var(--text-secondary-dark);
+    color: var(--text-primary-dark);
   }
 
   .bracketToggle:hover {
-    background: var(--card-hover-dark);
-  }
-
-  .bracketView {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
+    background: var(--surface-hover-dark);
   }
 }
 

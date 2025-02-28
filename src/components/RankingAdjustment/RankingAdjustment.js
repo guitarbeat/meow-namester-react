@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { useNavigate } from 'react-router-dom';
 import './RankingAdjustment.css';
 
-function RankingAdjustment({ rankings, onSave, onCancel }) {
+function RankingAdjustment({ rankings = [], onSave }) {
+  const navigate = useNavigate();
   const [items, setItems] = useState(rankings);
   const [saveStatus, setSaveStatus] = useState('');
   const [isDragging, setIsDragging] = useState(false);
 
   // Helper function to check if rankings have actually changed
   const haveRankingsChanged = (newItems, oldRankings) => {
+    if (!newItems || !oldRankings) return false;
     if (newItems.length !== oldRankings.length) return true;
     return newItems.some((item, index) => {
       return item.name !== oldRankings[index].name || 
@@ -17,6 +20,8 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
   };
 
   useEffect(() => {
+    if (!rankings || rankings.length === 0) return;
+    
     // Sort rankings by rating first, then by win percentage if ratings are equal
     const sortedRankings = [...rankings].sort((a, b) => {
       // Calculate win percentages
@@ -46,17 +51,43 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
 
   useEffect(() => {
     if (items && rankings && haveRankingsChanged(items, rankings)) {
+      console.log('Rankings changed, preparing to save:', {
+        currentItems: items,
+        previousRankings: rankings,
+        differences: items.map(item => {
+          const oldRanking = rankings.find(r => r.name === item.name);
+          return {
+            name: item.name,
+            oldRating: oldRanking?.rating,
+            newRating: item.rating,
+            difference: oldRanking ? item.rating - oldRanking.rating : 'new item'
+          };
+        })
+      });
+
       setSaveStatus('saving');
-      const saveTimer = setTimeout(() => {
-        onSave(items)
-          .then(() => {
-            setSaveStatus('success');
-            setTimeout(() => setSaveStatus(''), 2000);
-          })
-          .catch(() => {
-            setSaveStatus('error');
-            setTimeout(() => setSaveStatus(''), 3000);
+      const saveTimer = setTimeout(async () => {
+        try {
+          console.log('Initiating save operation with items:', items);
+          await onSave(items);
+          console.log('Save operation completed successfully');
+          setSaveStatus('success');
+          setTimeout(() => setSaveStatus(''), 2000);
+        } catch (error) {
+          console.error('Failed to save rankings:', {
+            error,
+            items,
+            rankings,
+            errorDetails: {
+              code: error.code,
+              message: error.message,
+              details: error.details,
+              hint: error.hint
+            }
           });
+          setSaveStatus('error');
+          setTimeout(() => setSaveStatus(''), 3000);
+        }
       }, 500);
 
       return () => clearTimeout(saveTimer);
@@ -95,11 +126,11 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
   const getSaveStatusDisplay = () => {
     switch (saveStatus) {
       case 'saving':
-        return <div className="save-status saving">Saving changes...</div>;
+        return <div className="save-status-toast saving">Saving changes...</div>;
       case 'success':
-        return <div className="save-status success">✓ Changes saved</div>;
+        return <div className="save-status-toast success">✓ Changes saved</div>;
       case 'error':
-        return <div className="save-status error">Failed to save. Try again.</div>;
+        return <div className="save-status-toast error">Failed to save. Try again.</div>;
       default:
         return null;
     }
@@ -109,8 +140,12 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
     <div className={`ranking-adjustment ${isDragging ? 'is-dragging' : ''}`}>
       <header className="ranking-header">
         <h2>Your Cat Name Rankings</h2>
-        {getSaveStatusDisplay()}
       </header>
+      {saveStatus && (
+        <div className="save-status-container">
+          {getSaveStatusDisplay()}
+        </div>
+      )}
 
       <div className="instructions-card">
         <div className="instruction-icon">↕️</div>
@@ -179,7 +214,10 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
       </div>
 
       <div className="adjustment-controls">
-        <button onClick={onCancel} className="back-button">
+        <button 
+          onClick={() => navigate('/tournament', { replace: true })}
+          className="back-button"
+        >
           <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>

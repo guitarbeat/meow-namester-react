@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth, useUserPreferences } from '../../contexts';
+import { ErrorBoundary } from '../';
 import styles from './Login.module.css';
 
-function Login({ onLogin }) {
+function LoginContent() {
+  const { login, error: authError, isInitialized } = useAuth();
+  const { preferences } = useUserPreferences();
+  
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -35,6 +40,14 @@ function Login({ onLogin }) {
       .catch(() => setCatFact('Cats make purr-fect companions!'));
   }, []);
 
+  // Update error state when auth error changes
+  useEffect(() => {
+    if (authError) {
+      setError(authError);
+      setIsLoading(false);
+    }
+  }, [authError]);
+
   const handleNameChange = (e) => {
     setName(e.target.value);
     if (error) setError('');
@@ -51,12 +64,23 @@ function Login({ onLogin }) {
 
     setIsLoading(true);
     try {
-      await onLogin(trimmedName);
+      await login(trimmedName);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
       setIsLoading(false);
     }
   };
+
+  if (!isInitialized) {
+    return (
+      <div className={styles.loginWrapper}>
+        <div className={styles.loadingContainer}>
+          <div className={styles.spinner} />
+          <p>Initializing...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.loginWrapper}>
@@ -158,6 +182,14 @@ function Login({ onLogin }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function Login() {
+  return (
+    <ErrorBoundary>
+      <LoginContent />
+    </ErrorBoundary>
   );
 }
 

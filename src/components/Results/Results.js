@@ -4,8 +4,10 @@
  * Shows the tournament results with ratings and provides option to restart.
  */
 
-import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
-import ResultsTable from './ResultsTable';
+import React, { useState, useCallback, useEffect, memo, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth, useTournament, useUserPreferences, useNameOptions } from '../../contexts';
+import { LoadingSpinner, ErrorBoundary } from '../';
 import RankingAdjustment from '../RankingAdjustment/RankingAdjustment';
 import Bracket from '../Bracket/Bracket';
 import styles from './Results.module.css';
@@ -29,19 +31,46 @@ const Toast = memo(({ message, type, onClose }) => (
   </div>
 ));
 
-function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTournamentNames, voteHistory }) {
+function Results({ 
+  ratings, 
+  userName, 
+  onUpdateRatings, 
+  currentTournamentNames, 
+  voteHistory,
+  onStartNewTournament 
+}) {
+  const navigate = useNavigate();
+  const { nameOptions } = useNameOptions();
+  
   const [currentRankings, setCurrentRankings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   // Convert vote history to bracket matches
   const getBracketMatches = useCallback(() => {
-    if (!voteHistory || !voteHistory.length) return [];
+    if (!voteHistory || !voteHistory.length) {
+      console.log('🏆 Results: No vote history available');
+      return [];
+    }
+    
+    console.log('🏆 Results: Processing vote history:', {
+      totalVotes: voteHistory.length,
+      tournamentNames: currentTournamentNames?.length || 0
+    });
     
     // Filter to only include matches from the current tournament
     const tournamentNameSet = new Set(currentTournamentNames?.map(n => n.name) || []);
     
-    return voteHistory
+    // Get current stats for all names
+    const nameStats = {};
+    Object.entries(ratings || {}).forEach(([name, rating]) => {
+      nameStats[name] = {
+        wins: rating.wins || 0,
+        losses: rating.losses || 0
+      };
+    });
+    
+    const matches = voteHistory
       .filter(vote => 
         tournamentNameSet.has(vote.match.left.name) && 
         tournamentNameSet.has(vote.match.right.name)
@@ -50,9 +79,24 @@ function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTourna
         id: index + 1,
         name1: vote.match.left.name,
         name2: vote.match.right.name,
-        winner: vote.result < 0 ? -1 : vote.result > 0 ? 1 : 0
+        winner: vote.result < 0 ? -1 : vote.result > 0 ? 1 : 0,
+        player1: {
+          name: vote.match.left.name,
+          ...nameStats[vote.match.left.name]
+        },
+        player2: {
+          name: vote.match.right.name,
+          ...nameStats[vote.match.right.name]
+        }
       }));
-  }, [voteHistory, currentTournamentNames]);
+
+    console.log('🏆 Results: Bracket matches processed:', {
+      totalMatches: matches.length,
+      validMatches: matches.filter(m => m.winner !== undefined).length
+    });
+
+    return matches;
+  }, [voteHistory, currentTournamentNames, ratings]);
 
   // Memoized rankings processor
   const processRankings = useCallback((ratingsData) => {
@@ -72,41 +116,100 @@ function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTourna
   }, [currentTournamentNames]);
 
   useEffect(() => {
-    try {
-      const processedRankings = processRankings(ratings);
-      setCurrentRankings(processedRankings);
-    } catch (error) {
-      console.error('Error processing rankings:', error);
-      setToast({
-        show: true,
-        message: 'Error processing rankings data',
-        type: 'error'
+    const processRatings = async () => {
+      if (!currentTournamentNames?.length) {
+        console.log('🏆 Results: No tournament names to process');
+        return;
+      }
+
+      setIsLoading(true);
+
+      // Wait for ratings to be available
+      let retryCount = 0;
+      while (!nameOptions?.length && retryCount < 5) {
+        console.log('🏆 Results: Waiting for ratings', { 
+          retryCount,
+          nameOptionsCount: nameOptions?.length || 0,
+          tournamentNamesCount: currentTournamentNames?.length || 0
+        });
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        retryCount++;
+      }
+
+      const ratingsMap = new Map();
+      nameOptions?.forEach(option => {
+        const rating = option.cat_name_ratings?.[0]?.rating || 1500;
+        ratingsMap.set(option.name, rating);
       });
-    } finally {
+
+      const processedRankings = currentTournamentNames.map(name => ({
+        name,
+        rating: ratingsMap.get(name) || 1500
+      }));
+
+      console.log('🏆 Results: Processing complete', {
+        totalRatings: ratingsMap.size,
+        processedNames: processedRankings.length,
+        tournamentNames: currentTournamentNames.length
+      });
+
+      setCurrentRankings(processedRankings);
       setIsLoading(false);
-    }
-  }, [ratings, processRankings]);
+    };
+
+    processRatings();
+  }, [currentTournamentNames, nameOptions]);
 
   const handleSaveAdjustments = useCallback(async (adjustedRankings) => {
     try {
       setIsLoading(true);
       
+      console.log('🏆 Results: Starting rankings update:', {
+        adjustedCount: adjustedRankings.length,
+        currentCount: currentRankings.length
+      });
+      
       const updatedRankings = adjustedRankings.map(ranking => {
         const oldRanking = currentRankings.find(r => r.name === ranking.name);
+        const ratingChange = oldRanking ? ranking.rating - oldRanking.rating : 0;
+        
+        console.log('🏆 Results: Processing ranking update:', {
+          name: ranking.name,
+          oldRating: oldRanking?.rating,
+          newRating: ranking.rating,
+          change: ratingChange
+        });
+
         return {
           ...ranking,
-          change: oldRanking ? ranking.rating - oldRanking.rating : 0
+          change: ratingChange
         };
       });
 
       const newRatings = updatedRankings.map(({ name, rating }) => {
         const existingRating = ratings[name];
+        const nameOption = nameOptions.find(n => n.name === name);
+        
+        if (!existingRating?.name_id && !nameOption?.id) {
+          console.warn('⚠️ Results: Missing name_id for rating:', {
+            name,
+            existingRating,
+            nameOption
+          });
+        }
+        
         return {
           name,
+          name_id: existingRating?.name_id || nameOption?.id,
           rating: Math.round(rating),
           wins: existingRating?.wins || 0,
           losses: existingRating?.losses || 0
         };
+      });
+
+      console.log('🏆 Results: Updating ratings:', {
+        totalUpdates: newRatings.length,
+        validUpdates: newRatings.filter(r => r.name_id).length
       });
 
       await onUpdateRatings(newRatings);
@@ -118,16 +221,30 @@ function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTourna
         type: 'success'
       });
     } catch (error) {
-      console.error('Failed to update rankings:', error);
+      console.error('❌ Results: Failed to update rankings:', {
+        error,
+        errorCode: error.code,
+        errorMessage: error.message,
+        errorDetails: error.details,
+        errorHint: error.hint
+      });
+      
+      let errorMessage = 'Failed to update rankings. ';
+      if (error.code === '23502') {
+        errorMessage += 'Missing required name ID for one or more names.';
+      } else {
+        errorMessage += 'Please try again.';
+      }
+      
       setToast({
         show: true,
-        message: 'Failed to update rankings. Please try again.',
+        message: errorMessage,
         type: 'error'
       });
     } finally {
       setIsLoading(false);
     }
-  }, [currentRankings, ratings, onUpdateRatings]);
+  }, [currentRankings, ratings, onUpdateRatings, nameOptions]);
 
   const closeToast = useCallback(() => {
     setToast(prev => ({ ...prev, show: false }));
@@ -140,139 +257,90 @@ function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTourna
     }
   }, [toast.show, closeToast]);
 
-  useEffect(() => {
-    // Add cool effects to the results header
-    const header = document.querySelector('.results-header');
-    if (header && window.vfx) {
-      window.vfx.add(header, { shader: "wave", frequency: 2, amplitude: 0.01 });
-    }
-
-    // Add glitch effect to stats cards
-    const statCards = document.querySelectorAll('.stat-card');
-    statCards.forEach(card => {
-      if (window.vfx) {
-        window.vfx.add(card, { shader: "glitch", intensity: 0.2 });
-      }
-    });
-
-    // Add RGB shift to the tournament bracket
-    const bracket = document.querySelector('.tournament-bracket');
-    if (bracket && window.vfx) {
-      window.vfx.add(bracket, { shader: "rgbShift", intensity: 0.3 });
-    }
-
-    return () => {
-      if (window.vfx) {
-        if (header) window.vfx.remove(header);
-        statCards.forEach(card => window.vfx.remove(card));
-        if (bracket) window.vfx.remove(bracket);
-      }
-    };
-  }, []);
-
   // Memoize processed rankings
   const processedRankings = useMemo(() => 
     processRankings(ratings), [ratings]
   );
 
-  // Optimize vfx.js usage
-  useEffect(() => {
-    const vfxElements = [];
-    
-    const addVfx = (selector, config) => {
-      const el = document.querySelector(selector);
-      if (el && window.vfx) {
-        window.vfx.add(el, config);
-        vfxElements.push(el);
-      }
-    };
-
-    addVfx('.results-header', { shader: "wave", frequency: 2, amplitude: 0.01 });
-    addVfx('.stat-card', { shader: "glitch", intensity: 0.2 });
-    addVfx('.tournament-bracket', { shader: "rgbShift", intensity: 0.3 });
-
-    return () => {
-      vfxElements.forEach(el => window.vfx?.remove(el));
-    };
-  }, []);
-
   if (isLoading) {
-    return (
-      <div className={styles.loading} role="status" aria-label="Loading rankings">
-        <div className={styles.loadingSpinner} aria-hidden="true" />
-        <p>Processing rankings...</p>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
-
-  const bracketMatches = getBracketMatches();
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h2>Name Rankings</h2>
-        <p className={styles.welcome}>
-          Welcome back, <span className={styles.userName}>{userName}</span>! 
-          Here are your latest name rankings.
-        </p>
+        <h1>Tournament Results</h1>
+        <div className={styles.headerActions}>
+          <button 
+            onClick={async () => {
+              try {
+                setIsLoading(true);
+                const success = await onStartNewTournament();
+                if (success) {
+                  navigate('/tournament', { replace: true });
+                } else {
+                  throw new Error('Failed to start tournament');
+                }
+              } catch (error) {
+                console.error('Error starting new tournament:', error);
+                setToast({
+                  show: true,
+                  message: 'Failed to start new tournament. Please try again.',
+                  type: 'error'
+                });
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            className={styles.actionButton}
+            disabled={isLoading}
+          >
+            <span className={styles.buttonIcon}>🏆</span>
+            Start New Tournament
+          </button>
+          <button 
+            onClick={() => navigate('/profile', { replace: true })}
+            className={styles.actionButton}
+            disabled={isLoading}
+          >
+            <span className={styles.buttonIcon}>👤</span>
+            My Profile
+          </button>
+        </div>
       </header>
 
       <div className={styles.content}>
-        <div className={styles.statsGrid}>
-          <StatsCard 
-            title="Total Names" 
-            value={currentRankings.length} 
+        <section className={styles.rankingsSection}>
+          <h2>Final Rankings</h2>
+          <RankingAdjustment
+            rankings={currentRankings}
+            onSave={handleSaveAdjustments}
+            isLoading={isLoading}
           />
-        </div>
+        </section>
 
-        <RankingAdjustment
-          rankings={currentRankings}
-          onSave={handleSaveAdjustments}
-          onCancel={onStartNew}
-        />
-
-        <div className={styles.actions}>
-          <button 
-            onClick={onStartNew} 
-            className={styles.startNewButton}
-            aria-label="Start new tournament"
-          >
-            <svg 
-              viewBox="0 0 24 24" 
-              width="20" 
-              height="20" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              fill="none"
-              className={styles.buttonIcon}
-              aria-hidden="true"
-            >
-              <path d="M12 4v16m8-8H4" />
-            </svg>
-            Start New Tournament
-          </button>
-          <p className={styles.tip} role="note">
-            Starting a new tournament will let you rate more names while keeping your current rankings.
-          </p>
-        </div>
-
-        {bracketMatches.length > 0 && (
-          <div className={styles.tournamentBracket}>
-            <h3>Tournament Bracket</h3>
-            <Bracket matches={bracketMatches} />
-          </div>
-        )}
+        <section className={styles.bracketSection}>
+          <h2>Tournament History</h2>
+          <Bracket matches={getBracketMatches()} />
+        </section>
       </div>
 
       {toast.show && (
-        <Toast 
-          message={toast.message}
-          type={toast.type}
-          onClose={closeToast}
-        />
+        <div 
+          className={`${styles.toast} ${styles[toast.type]}`}
+          role="alert"
+        >
+          {toast.message}
+        </div>
       )}
     </div>
   );
 }
 
-export default memo(Results);
+export default function ResultsWithErrorBoundary() {
+  return (
+    <ErrorBoundary>
+      <Results />
+    </ErrorBoundary>
+  );
+}

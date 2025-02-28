@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase, getNamesWithDescriptions } from '../../supabase/supabaseClient';
 import { LoadingSpinner, NameCard, ErrorBoundary } from '../';
-import useNameOptions from '../../supabase/useNameOptions';
+import { useAuth, useTournament, useUserPreferences, useNameOptions } from '../../contexts';
 import styles from './TournamentSetup.module.css';
 
 const CAT_IMAGES = [
@@ -209,44 +209,50 @@ const NameSuggestionSection = () => {
   );
 };
 
-function useTournamentSetup(onStart) {
+function useTournamentSetup() {
+  const { userName } = useAuth();
+  const { startTournament } = useTournament();
+  const { preferences } = useUserPreferences();
+  
   const [availableNames, setAvailableNames] = useState([]);
   const [selectedNames, setSelectedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [enlargedImage, setEnlargedImage] = useState(null);
   const [error, setError] = useState(null);
+  const [namesData, setNamesData] = useState(null);
+  const [hiddenIds, setHiddenIds] = useState(new Set());
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+  // Fetch names data only once on mount
   useEffect(() => {
     const fetchNames = async () => {
       try {
+        if (isInitialLoad) {
+          console.log('🎮 TournamentSetup: Initial setup started');
+          setIsInitialLoad(false);
+        }
         setIsLoading(true);
         setError(null);
         
-        // Get all names and hidden names in parallel for efficiency
-        const [namesData, { data: hiddenData, error: hiddenError }] = await Promise.all([
+        const [names, { data: hiddenData, error: hiddenError }] = await Promise.all([
           getNamesWithDescriptions(),
           supabase.from('hidden_names').select('name_id')
         ]);
         
         if (hiddenError) throw hiddenError;
         
-        // Create Set of hidden IDs for O(1) lookup
-        const hiddenIds = new Set(hiddenData?.map(item => item.name_id) || []);
+        const newHiddenIds = new Set(hiddenData?.map(item => item.name_id) || []);
+        setNamesData(names);
+        setHiddenIds(newHiddenIds);
         
-        // Filter out hidden names
-        const filteredNames = namesData.filter(name => !hiddenIds.has(name.id));
-        
-        // Sort names alphabetically for better UX
-        const sortedNames = filteredNames.sort((a, b) => a.name.localeCompare(b.name));
-        
-        console.log(`Loaded ${sortedNames.length} available names (${hiddenIds.size} hidden)`);
-        setAvailableNames(sortedNames);
-        
-        // If any currently selected names are now hidden, remove them
-        setSelectedNames(prev => prev.filter(name => !hiddenIds.has(name.id)));
+        console.log('🎮 TournamentSetup: Data loaded', {
+          availableNames: names.length,
+          hiddenNames: newHiddenIds.size,
+          userPreferences: preferences.hiddenNames?.size || 0
+        });
         
       } catch (err) {
-        console.error('Error fetching names:', err);
+        console.error('❌ TournamentSetup: Error fetching names:', err);
         setError(`Failed to load names: ${err.message}`);
       } finally {
         setIsLoading(false);
@@ -254,21 +260,83 @@ function useTournamentSetup(onStart) {
     };
 
     fetchNames();
-  }, []); // Empty dependency array since we only want to fetch once on mount
+  }, [preferences.hiddenNames]); // Only depend on preferences.hiddenNames
 
-  const toggleName = (nameObj) => {
-    setSelectedNames(prev => 
-      prev.some(n => n.id === nameObj.id)
+  // Filter and sort names when data or preferences change
+  useEffect(() => {
+    if (!namesData) return;
+
+    const filteredNames = namesData
+      .filter(name => 
+        !hiddenIds.has(name.id) && 
+        (!preferences.hiddenNames || !preferences.hiddenNames.has(name.id))
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const hasNamesChanged = 
+      filteredNames.length !== availableNames.length ||
+      JSON.stringify(filteredNames) !== JSON.stringify(availableNames);
+
+    if (hasNamesChanged) {
+      console.log('🎮 TournamentSetup: Names updated', {
+        available: filteredNames.length,
+        selected: selectedNames.length,
+        hidden: hiddenIds.size
+      });
+      setAvailableNames(filteredNames);
+      
+      // Update selected names to remove any that are now hidden
+      setSelectedNames(prev => {
+        const updatedSelection = prev.filter(name => 
+          !hiddenIds.has(name.id) && 
+          (!preferences.hiddenNames || !preferences.hiddenNames.has(name.id))
+        );
+        return updatedSelection;
+      });
+    }
+  }, [namesData, hiddenIds, preferences.hiddenNames]);
+
+  const toggleName = useCallback((nameObj) => {
+    setSelectedNames(prev => {
+      const isSelected = prev.some(n => n.id === nameObj.id);
+      const newSelection = isSelected
         ? prev.filter(n => n.id !== nameObj.id)
-        : [...prev, nameObj]
-    );
-  };
+        : [...prev, nameObj];
+      
+      // Only log significant selection changes
+      if (newSelection.length === 2 || newSelection.length === 0) {
+        console.log('🎮 TournamentSetup: Selection updated', {
+          count: newSelection.length,
+          ready: newSelection.length >= 2
+        });
+      }
+      
+      return newSelection;
+    });
+  }, []);
 
-  const handleSelectAll = () => {
-    setSelectedNames(
-      selectedNames.length === availableNames.length ? [] : [...availableNames]
-    );
-  };
+  const handleSelectAll = useCallback(() => {
+    setSelectedNames(prev => {
+      const newSelection = prev.length === availableNames.length ? [] : [...availableNames];
+      console.log('🎮 TournamentSetup: Bulk selection', {
+        action: newSelection.length === 0 ? 'cleared' : 'selected all',
+        count: newSelection.length
+      });
+      return newSelection;
+    });
+  }, [availableNames]);
+
+  const handleStart = useCallback((names) => {
+    if (names.length < 2) {
+      console.warn('❌ TournamentSetup: Cannot start - insufficient names selected');
+      return;
+    }
+    console.log('🎮 TournamentSetup: Starting tournament', {
+      participants: names.length,
+      names: names.map(n => n.name)
+    });
+    startTournament(names);
+  }, [startTournament]);
 
   return {
     availableNames,
@@ -278,11 +346,12 @@ function useTournamentSetup(onStart) {
     enlargedImage,
     setEnlargedImage,
     toggleName,
-    handleSelectAll
+    handleSelectAll,
+    handleStart
   };
 }
 
-function TournamentSetupContent({ onStart }) {
+function TournamentSetupContent() {
   const {
     availableNames,
     selectedNames,
@@ -291,8 +360,9 @@ function TournamentSetupContent({ onStart }) {
     enlargedImage,
     setEnlargedImage,
     toggleName,
-    handleSelectAll
-  } = useTournamentSetup(onStart);
+    handleSelectAll,
+    handleStart
+  } = useTournamentSetup();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -406,7 +476,7 @@ function TournamentSetupContent({ onStart }) {
           {selectedNames.length >= 2 && (
             <StartButton 
               selectedNames={selectedNames}
-              onStart={onStart}
+              onStart={handleStart}
             />
           )}
         </main>
@@ -451,10 +521,10 @@ function TournamentSetupContent({ onStart }) {
   );
 }
 
-function TournamentSetup(props) {
+function TournamentSetup() {
   return (
     <ErrorBoundary>
-      <TournamentSetupContent {...props} />
+      <TournamentSetupContent />
     </ErrorBoundary>
   );
 }

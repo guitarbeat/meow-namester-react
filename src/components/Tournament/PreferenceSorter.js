@@ -15,6 +15,7 @@ export class PreferenceSorter {
         this.ranks = [];
         this.rec = new Array(items.length).fill(0);
         this.preferenceCache = new Map();
+        this.remainingPairs = this.generatePairs();
         // Consider adding: this.maxCacheSize = 1000;
         // Implement LRU eviction when cache exceeds max size
     }
@@ -23,9 +24,56 @@ export class PreferenceSorter {
         return typeof item === 'string' ? item : item.name;
     }
 
+    generatePairs() {
+        const pairs = [];
+        for (let i = 0; i < this.items.length; i++) {
+            for (let j = i + 1; j < this.items.length; j++) {
+                pairs.push([this.items[i], this.items[j]]);
+            }
+        }
+        return pairs;
+    }
+
+    recordMatch(item1, item2, result) {
+        // Convert result to numeric value for preference sorting
+        let value;
+        switch (result) {
+            case 'left':
+                value = -1;
+                break;
+            case 'right':
+                value = 1;
+                break;
+            case 'both':
+                value = 0.1;
+                break;
+            case 'none':
+                value = -0.1;
+                break;
+            default:
+                value = 0;
+        }
+
+        // Record the preference
+        const key = `${this.getName(item1)}-${this.getName(item2)}`;
+        this.preferences.set(key, value);
+        this.preferenceCache.clear(); // Clear cache since preferences changed
+
+        // Remove the pair from remaining pairs
+        this.remainingPairs = this.remainingPairs.filter(([a, b]) => 
+            !(this.getName(a) === this.getName(item1) && this.getName(b) === this.getName(item2)) &&
+            !(this.getName(a) === this.getName(item2) && this.getName(b) === this.getName(item1))
+        );
+    }
+
+    getRemainingPairs() {
+        return this.remainingPairs.map(([a, b]) => [this.getName(a), this.getName(b)]);
+    }
+
     addPreference(item1, item2, value) {
         const key = `${this.getName(item1)}-${this.getName(item2)}`;
         this.preferences.set(key, value);
+        this.preferenceCache.clear(); // Clear cache when adding new preference
     }
 
     getPreference(item1, item2) {

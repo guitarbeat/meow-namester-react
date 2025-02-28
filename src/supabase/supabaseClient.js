@@ -25,7 +25,40 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables. Please check your .env file.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Configure the Supabase client with additional options
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 10
+    }
+  }
+});
+
+// Create a single channel instance for status monitoring
+const statusChannel = supabase.channel('status');
+
+// Set up status monitoring without resubscription attempts
+statusChannel
+  .on('system', { event: '*' }, (payload) => {
+    if (payload.event === 'disconnected') {
+      console.log('Disconnected from Supabase realtime');
+    } else if (payload.event === 'connected') {
+      console.log('Connected to Supabase realtime');
+    } else if (payload.event === 'error') {
+      console.warn('Supabase realtime error:', payload.error);
+    }
+  })
+  .subscribe();
+
+// Export helper function to check connection status
+export const isRealtimeConnected = () => {
+  return statusChannel.state === 'joined';
+};
 
 // Add this function to get names with descriptions
 export const getNamesWithDescriptions = async () => {

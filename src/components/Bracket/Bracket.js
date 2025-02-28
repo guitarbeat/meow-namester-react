@@ -61,29 +61,44 @@ function Match({ match, isLastRound }) {
   const getResultBadge = (isFirst) => {
     switch (status) {
       case MatchResult.FIRST_WIN:
-        return isFirst && <span className={styles.winnerBadge} title="Winner">✓</span>;
+        return isFirst && <span className={styles.winnerBadge} title="Winner">Winner</span>;
       case MatchResult.SECOND_WIN:
-        return !isFirst && <span className={styles.winnerBadge} title="Winner">✓</span>;
+        return !isFirst && <span className={styles.winnerBadge} title="Winner">Winner</span>;
       case MatchResult.BOTH_ADVANCE:
-        return <span className={styles.tieBadge} title="Both Liked">♥</span>;
+        return <span className={styles.tieBadge} title="Both Liked">Both Advance</span>;
       case MatchResult.NEITHER:
-        return <span className={styles.skipBadge} title="Skipped">⊘</span>;
+        return <span className={styles.skipBadge} title="Skipped">Skipped</span>;
       default:
         return null;
     }
+  };
+
+  const getPlayerStats = (player) => {
+    if (!player) return null;
+    return (
+      <span className={styles.playerStats}>
+        {player.wins || 0}W - {player.losses || 0}L
+      </span>
+    );
   };
 
   return (
     <div className={styles.match}>
       <div className={styles.matchContent}>
         <div className={getPlayerClass(true)}>
-          <span className={styles.playerName}>{match.name1}</span>
+          <div className={styles.playerInfo}>
+            <span className={styles.playerName}>{match.name1}</span>
+            {getPlayerStats(match.player1)}
+          </div>
           {getResultBadge(true)}
         </div>
         <div className={styles.vsDivider}>vs</div>
         {match.name2 ? (
           <div className={getPlayerClass(false)}>
-            <span className={styles.playerName}>{match.name2}</span>
+            <div className={styles.playerInfo}>
+              <span className={styles.playerName}>{match.name2}</span>
+              {getPlayerStats(match.player2)}
+            </div>
             {getResultBadge(false)}
           </div>
         ) : (

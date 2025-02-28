@@ -1,112 +1,36 @@
 /**
  * @module useNameOptions
- * @description A custom React hook that manages cat name options in Supabase.
+ * @description A custom React hook that manages cat name options.
+ * This is now a wrapper around the CatNamesContext for backward compatibility.
+ * New components should use the useCatNames hook from contexts directly.
+ * 
+ * @deprecated Use the useCatNames hook from contexts instead
  */
 
-import { useState, useEffect } from 'react';
-import { supabase } from './supabaseClient';
+import { useCatNames } from '../contexts';
 
-function useNameOptions() {
-  const [nameOptions, setNameOptions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetchNameOptions();
-    
-    // Set up real-time subscription
-    const subscription = supabase
-      .channel('name_options_changes')
-      .on('postgres_changes', 
-        { 
-          event: '*', 
-          schema: 'public', 
-          table: 'name_options' 
-        }, 
-        () => {
-          fetchNameOptions();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  async function fetchNameOptions() {
-    try {
-      setLoading(true);
-      const { data, error: fetchError } = await supabase
-        .from('name_options')
-        .select('name, description')
-        .order('created_at', { ascending: true });
-
-      if (fetchError) throw fetchError;
-
-      setNameOptions(data);
-    } catch (err) {
-      console.error('Error fetching name options:', err);
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function addNameOption(newName, description = '') {
-    if (!newName?.trim()) return;
-    
-    try {
-      setLoading(true);
-      const { error: insertError } = await supabase
-        .from('name_options')
-        .insert([{ 
-          name: newName.trim(),
-          description: description.trim()
-        }])
-        .select();  // Add select() to ensure proper error handling
-
-      if (insertError) {
-        console.error('Insert error details:', insertError);
-        throw insertError;
-      }
-      
-      // Fetch updated data after successful insert
-      await fetchNameOptions();
-      
-    } catch (err) {
-      console.error('Error adding name option:', err);
-      setError(err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function removeNameOption(name) {
-    try {
-      setLoading(true);
-      const { error: deleteError } = await supabase
-        .from('name_options')
-        .delete()
-        .eq('name', name);
-
-      if (deleteError) throw deleteError;
-    } catch (err) {
-      console.error('Error removing name option:', err);
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }
+export function useNameOptions() {
+  const {
+    nameOptions,
+    lastUpdate,
+    addNameOption,
+    hideNameOption,
+    refreshNames,
+    ratings,        // Include ratings for tournament integration
+    isLoading,
+    error,
+    tournamentNames // Include tournament names for cross-referencing
+  } = useCatNames();
 
   return {
     nameOptions,
-    loading,
-    error,
+    lastUpdate,
     addNameOption,
-    removeNameOption
+    hideNameOption,
+    refreshNames,
+    ratings,        // Expose ratings
+    isLoading,
+    error,
+    tournamentNames // Expose tournament names
   };
 }
-
-export default useNameOptions;

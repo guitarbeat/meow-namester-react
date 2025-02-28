@@ -72,6 +72,10 @@ CREATE POLICY "Public can modify cat names" ON public.cat_names
 CREATE TABLE public.name_options (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    created_by TEXT,
+    votes_count INTEGER DEFAULT 0,
+    average_rating INTEGER DEFAULT 1500,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 

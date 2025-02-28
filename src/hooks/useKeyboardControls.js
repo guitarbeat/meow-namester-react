@@ -1,9 +1,14 @@
 /**
  * @module useKeyboardControls
- * @description A custom hook that handles keyboard controls for the tournament interface
+ * @description A custom hook that handles keyboard controls for the tournament interface.
+ * This is now a wrapper around the KeyboardControlsContext for backward compatibility.
+ * New components should use the useKeyboardControls hook from contexts directly.
+ * 
+ * @deprecated Use the useKeyboardControls hook from contexts instead
  */
 
 import { useEffect } from 'react';
+import { useKeyboardControls as useKeyboardControlsInternal } from '../contexts';
 
 export function useKeyboardControls({
   onLeft,
@@ -13,37 +18,19 @@ export function useKeyboardControls({
   onUndo,
   isDisabled = false
 }) {
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (isDisabled) return;
-      
-      switch(event.key.toLowerCase()) {
-        case 'arrowleft':
-          event.preventDefault();
-          onLeft?.();
-          break;
-        case 'arrowright':
-          event.preventDefault();
-          onRight?.();
-          break;
-        case 'b':
-          event.preventDefault();
-          onBoth?.();
-          break;
-        case 'n':
-          event.preventDefault();
-          onNone?.();
-          break;
-        case 'u':
-          event.preventDefault();
-          onUndo?.();
-          break;
-        default:
-          break;
-      }
-    };
+  const { registerHandlers, toggleControls } = useKeyboardControlsInternal();
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onLeft, onRight, onBoth, onNone, onUndo, isDisabled]);
+  useEffect(() => {
+    toggleControls(isDisabled);
+  }, [isDisabled, toggleControls]);
+
+  useEffect(() => {
+    return registerHandlers({
+      onLeft,
+      onRight,
+      onBoth,
+      onNone,
+      onUndo
+    });
+  }, [onLeft, onRight, onBoth, onNone, onUndo, registerHandlers]);
 } 
