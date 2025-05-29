@@ -46,13 +46,15 @@ class ErrorBoundary extends React.Component {
               We're sorry, but something unexpected happened. You can try refreshing the page or contact support if the problem persists.
               {process.env.NODE_ENV === 'development' && this.state.error && (
                 <>
-                  <br /><br />
-                  <strong>Error details (development only):</strong><br />
+                  <br />
+                  <br />
+                  <strong>Error details (development only):</strong>
+                  <br />
                   {this.state.error.toString()}
                 </>
               )}
             </p>
-            <button 
+            <button
               onClick={this.handleRefresh}
               className={styles.refreshButton}
             >
@@ -63,7 +65,6 @@ class ErrorBoundary extends React.Component {
         </div>
       );
     }
-
     return this.props.children;
   }
 }

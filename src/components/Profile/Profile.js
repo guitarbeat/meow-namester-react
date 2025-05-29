@@ -7,7 +7,7 @@ import { Chart as ChartJS,
   BarElement, PieController, ArcElement, 
   RadarController, RadialLinearScale 
 } from 'chart.js';
-import { Bar, Pie } from 'react-chartjs-2';
+import { Bar, Pie, Line } from 'react-chartjs-2';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 // import CalendarButton from '../depreciated/CalendarButton/CalendarButton';
 import styles from './Profile.module.css';

@@ -384,7 +384,7 @@ export function useTournament({ names = [], existingRatings = {}, onComplete }) 
       setIsTransitioning(false);
       setRoundNumber(1);
       setCurrentMatchNumber(1);
-      setMatchHistory([]);
+      updateTournamentState(prev => ({ ...prev, matchHistory: [] }));
       setCanUndo(false);
       throw error; // Propagate error to parent
     }
@@ -400,7 +400,7 @@ export function useTournament({ names = [], existingRatings = {}, onComplete }) 
     const lastVote = matchHistory[matchHistory.length - 1];
     setCurrentMatch(lastVote.match);
     setCurrentMatchNumber(lastVote.matchNumber);
-    setMatchHistory(prev => prev.slice(0, -1));
+    updateTournamentState(prev => ({ ...prev, matchHistory: prev.matchHistory.slice(0, -1) }));
     
     if (sorter) {
       sorter.undoLastPreference();
