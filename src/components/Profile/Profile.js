@@ -790,7 +790,7 @@ const ChartSection = memo(({ aggregatedNames, filterStatus }) => {
 });
 
 const AggregatedStats = memo(
-  ({ allUsersRatings, onToggleVisibility, onDelete, isAdmin }) => {
+  ({ allUsersRatings, onToggleVisibility, onDelete, isAdmin, refreshHiddenTrigger }) => {
     const [filterStatus, setFilterStatus] = useState(
       FILTER_OPTIONS.STATUS.ACTIVE,
     );
@@ -819,7 +819,7 @@ const AggregatedStats = memo(
       };
 
       fetchHiddenNames();
-    }, []);
+    }, [refreshHiddenTrigger]);
 
     const aggregatedNames = useMemo(() => {
       const nameMap = new Map();
@@ -1507,10 +1507,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [hiddenNames, setHiddenNames] = useState(new Set());
   const [showDeleteNameConfirm, setShowDeleteNameConfirm] = useState(false);
   const [nameToDelete] = useState(null);
-  const [deleteNameStatus, setDeleteNameStatus] = useState({
-    loading: false,
-    error: null,
-  });
+  const [hiddenRefreshToken, setHiddenRefreshToken] = useState(0);
+  const [deleteNameStatus, setDeleteNameStatus] = useState({ loading: false, error: null });
   const [allUsersRatings, setAllUsersRatings] = useState({});
   const [userLastActivity, setUserLastActivity] = useState({});
   const [currentUserRatings, setCurrentUserRatings] = useState([]);
@@ -1697,6 +1695,34 @@ const Profile = ({ userName, onStartNewTournament }) => {
     [hiddenNames, fetchHiddenNames],
   );
 
+  const handleUnhideAllNames = useCallback(async () => {
+    if (hiddenNames.size === 0) {
+      return;
+    }
+    if (
+      !window.confirm(
+        "Unhide all names? This will make all names available in tournaments.",
+      )
+    ) {
+      return;
+    }
+    try {
+      const ids = Array.from(hiddenNames);
+      const { error } = await supabase
+        .from("hidden_names")
+        .delete()
+        .in("name_id", ids);
+      if (error) {
+        throw error;
+      }
+      setHiddenNames(new Set());
+      await fetchHiddenNames();
+      setHiddenRefreshToken((t) => t + 1);
+    } catch (err) {
+      console.error("Error unhiding all names:", err);
+    }
+  }, [hiddenNames, fetchHiddenNames]);
+
   const handleDeleteName = useCallback(
     async (nameId) => {
       try {
@@ -1809,6 +1835,17 @@ const Profile = ({ userName, onStartNewTournament }) => {
                 : "Show Overall Rankings"}
             </Button>
           )}
+          {isAdmin && (
+            <Button
+              onClick={handleUnhideAllNames}
+              variant="delete"
+              disabled={hiddenNames.size === 0}
+              aria-label="Unhide all names"
+              title={hiddenNames.size === 0 ? "No hidden names" : "Unhide all names"}
+            >
+              Unhide All Names
+            </Button>
+          )}
           {userName.toLowerCase() === "aaron" && (
             <Button onClick={onStartNewTournament}>Start Tournament</Button>
           )}
@@ -1826,6 +1863,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
             onToggleVisibility={handleToggleNameVisibility}
             onDelete={handleDeleteName}
             isAdmin={isAdmin}
+            refreshHiddenTrigger={hiddenRefreshToken}
           />
         ) : (
           <>
