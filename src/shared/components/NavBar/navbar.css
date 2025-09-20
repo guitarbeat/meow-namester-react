@@ -22,7 +22,10 @@
 
   /* Ensure navbar is always on top and clickable */
   pointer-events: auto;
-  background: rgb(255 255 255 / 25%); /* Increased from 12% for better visibility */
+  background: rgb(
+    255 255 255 / 25%
+  ); /* Increased from 12% for better visibility */
+
   border-bottom: 2px solid rgb(255 255 255 / 40%); /* Increased from 20% and made thicker */
   box-shadow:
     0 0 0 1px rgb(255 255 255 / 80%),
@@ -175,8 +178,8 @@
   border: 2px solid rgb(255 255 255 / 25%); /* Increased from 15% and made thicker */
   border-radius: 50%;
   box-shadow:
-    0 4px 12px rgb(0 0 0 / 20%), /* Increased shadow */
-    inset 0 1px 0 rgb(255 255 255 / 15%);
+    0 4px 12px rgb(0 0 0 / 20%),
+    /* Increased shadow */ inset 0 1px 0 rgb(255 255 255 / 15%);
   backdrop-filter: blur(15px); /* Increased blur */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -189,15 +192,15 @@
   background: rgb(255 255 255 / 25%); /* Increased from 15% */
   border-color: rgb(255 255 255 / 40%); /* Increased from 25% */
   box-shadow:
-    0 6px 20px rgb(0 0 0 / 25%), /* Increased shadow */
-    inset 0 1px 0 rgb(255 255 255 / 20%);
+    0 6px 20px rgb(0 0 0 / 25%),
+    /* Increased shadow */ inset 0 1px 0 rgb(255 255 255 / 20%);
   transform: translateY(-2px) scale(1.05);
 }
 
 .navbar__action-button:active {
   box-shadow:
-    0 2px 8px rgb(0 0 0 / 15%), /* Increased shadow */
-    inset 0 1px 0 rgb(255 255 255 / 15%);
+    0 2px 8px rgb(0 0 0 / 15%),
+    /* Increased shadow */ inset 0 1px 0 rgb(255 255 255 / 15%);
   transform: translateY(0) scale(0.98);
 }
 
@@ -215,8 +218,8 @@
   outline: 3px solid var(--accent-color); /* Increased from 2px */
   outline-offset: 3px; /* Increased from 2px */
   box-shadow:
-    0 0 0 6px rgb(232 191 118 / 40%), /* Increased from 4px and 30% */
-    0 4px 12px rgb(0 0 0 / 15%),
+    0 0 0 6px rgb(232 191 118 / 40%),
+    /* Increased from 4px and 30% */ 0 4px 12px rgb(0 0 0 / 15%),
     inset 0 1px 0 rgb(255 255 255 / 15%);
 }
 
@@ -244,7 +247,10 @@
   padding: 16px 12px; /* Increased padding */
   cursor: pointer;
   user-select: none;
-  background: rgb(255 255 255 / 20%); /* Increased from 10% for better visibility */
+  background: rgb(
+    255 255 255 / 20%
+  ); /* Increased from 10% for better visibility */
+
   border: 2px solid rgb(255 255 255 / 30%); /* Added border for better visibility */
   border-radius: 16px; /* Increased from 12px for modern look */
   box-shadow: 0 4px 12px rgb(0 0 0 / 30%); /* Increased shadow */
@@ -335,7 +341,10 @@
 /* Mobile Menu Header */
 .navbar__mobile-menu-header {
   padding: 2rem 2rem 1rem;
-  background: rgb(255 255 255 / 10%); /* Increased from 5% for better visibility */
+  background: rgb(
+    255 255 255 / 10%
+  ); /* Increased from 5% for better visibility */
+
   border-bottom: 2px solid rgb(255 255 255 / 20%); /* Increased from 10% and made thicker */
 }
 
@@ -411,7 +420,10 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   cursor: pointer;
-  background: rgb(255 255 255 / 25%); /* Increased from 15% for better visibility */
+  background: rgb(
+    255 255 255 / 25%
+  ); /* Increased from 15% for better visibility */
+
   border: none;
   transition: all 0.2s ease;
 }
@@ -435,7 +447,10 @@
   font-weight: 500;
   color: #fff;
   cursor: pointer;
-  background: rgb(255 255 255 / 25%); /* Increased from 15% for better visibility */
+  background: rgb(
+    255 255 255 / 25%
+  ); /* Increased from 15% for better visibility */
+
   border: none;
   transition: all 0.2s ease;
 }
@@ -481,7 +496,10 @@
 
 /* Transparent Navbar for Login */
 .navbar.transparent {
-  background: rgb(255 255 255 / 15%); /* Changed from transparent to semi-transparent for better visibility */
+  background: rgb(
+    255 255 255 / 15%
+  ); /* Changed from transparent to semi-transparent for better visibility */
+
   border-bottom: 2px solid rgb(255 255 255 / 30%); /* Added border for better visibility */
   box-shadow: 0 8px 24px rgb(0 0 0 / 20%); /* Added shadow for better visibility */
 }
@@ -498,7 +516,10 @@
 
 /* Light Theme - Liquid Glass */
 .navbar.light-theme {
-  background: rgb(255 255 255 / 20%); /* Increased from 8% for better visibility */
+  background: rgb(
+    255 255 255 / 20%
+  ); /* Increased from 8% for better visibility */
+
   border-bottom: 2px solid rgb(0 0 0 / 20%); /* Increased from 10% and made thicker */
   box-shadow:
     0 0 0 1px rgb(255 255 255 / 90%),
@@ -757,7 +778,7 @@
 @supports (-webkit-touch-callout: none) {
   .navbar {
     z-index: 10000; /* ensure on top of other fixed elements */
-            transform: translateZ(0);
+    transform: translateZ(0);
   }
 }
 
@@ -809,7 +830,10 @@
   pointer-events: none;
   cursor: pointer;
   user-select: none;
-  background: rgb(255 255 255 / 20%); /* Increased from 10% for better visibility */
+  background: rgb(
+    255 255 255 / 20%
+  ); /* Increased from 10% for better visibility */
+
   border: 2px solid rgb(255 255 255 / 30%); /* Added border for better visibility */
   border-radius: 50%;
   opacity: 0;
@@ -845,8 +869,9 @@
   height: 44px; /* Increased from 40px for better touch target */
   background: linear-gradient(
     135deg,
-    rgb(59 130 246 / 20%), /* Increased from 10% for better visibility */
-    rgb(147 51 234 / 20%) /* Increased from 10% for better visibility */
+    rgb(59 130 246 / 20%),
+    /* Increased from 10% for better visibility */ rgb(147 51 234 / 20%)
+      /* Increased from 10% for better visibility */
   );
   border: 2px solid rgb(255 255 255 / 30%); /* Increased from 20% and made thicker */
   border-radius: 50%;

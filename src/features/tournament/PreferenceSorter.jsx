@@ -66,7 +66,11 @@ export class PreferenceSorter {
     this.preferences.set(key, value);
     this.preferenceCache.set(key, value);
     // Record history for undo support
-    this.history.push({ a: this.getName(item1), b: this.getName(item2), value });
+    this.history.push({
+      a: this.getName(item1),
+      b: this.getName(item2),
+      value
+    });
   }
 
   getPreference(item1, item2) {

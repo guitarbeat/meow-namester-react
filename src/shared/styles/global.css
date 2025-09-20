@@ -347,15 +347,34 @@ select:focus-visible {
   color: var(--text-primary);
 }
 
-.text-sm { font-size: var(--text-sm); }
-.text-base { font-size: var(--text-base); }
-.text-lg { font-size: var(--text-lg); }
+.text-sm {
+  font-size: var(--text-sm);
+}
+
+.text-base {
+  font-size: var(--text-base);
+}
+
+.text-lg {
+  font-size: var(--text-lg);
+}
 
 /* Spacing (limited set) */
-.mt-2 { margin-top: var(--space-2); }
-.mt-4 { margin-top: var(--space-4); }
-.mb-2 { margin-bottom: var(--space-2); }
-.mb-4 { margin-bottom: var(--space-4); }
+.mt-2 {
+  margin-top: var(--space-2);
+}
+
+.mt-4 {
+  margin-top: var(--space-4);
+}
+
+.mb-2 {
+  margin-bottom: var(--space-2);
+}
+
+.mb-4 {
+  margin-bottom: var(--space-4);
+}
 
 /* Reduced Motion - Using CSS custom properties for better maintainability */
 :root {
@@ -2212,7 +2231,9 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background: transparent; /* Let galaxy show through without !important */
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
 
 .app.transitioning {
@@ -3200,8 +3221,11 @@ h1 {
   width: 80px;
   height: 80px;
   opacity: 0.55;
-  filter: drop-shadow(0 0 10px rgb(255 255 255 / 25%)) saturate(0.95) blur(0.2px);
-  animation: float1 8s ease-in-out infinite, breathe1 7s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgb(255 255 255 / 25%)) saturate(0.95)
+    blur(0.2px);
+  animation:
+    float1 8s ease-in-out infinite,
+    breathe1 7s ease-in-out infinite;
 }
 
 .cat-background__cat--2 {
@@ -3211,8 +3235,11 @@ h1 {
   width: 104px;
   height: 104px;
   opacity: 0.7;
-  filter: drop-shadow(0 0 14px rgb(255 255 255 / 35%)) saturate(1.1) brightness(1.05);
-  animation: float2 10s ease-in-out infinite, breathe2 6.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 14px rgb(255 255 255 / 35%)) saturate(1.1)
+    brightness(1.05);
+  animation:
+    float2 10s ease-in-out infinite,
+    breathe2 6.5s ease-in-out infinite;
   animation-delay: -2s, 0s;
 }
 
@@ -3223,8 +3250,11 @@ h1 {
   width: 128px;
   height: 128px;
   opacity: 0.85;
-  filter: drop-shadow(0 0 18px rgb(255 255 255 / 45%)) saturate(1.2) brightness(1.08);
-  animation: float3 12s ease-in-out infinite, breathe3 8s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px rgb(255 255 255 / 45%)) saturate(1.2)
+    brightness(1.08);
+  animation:
+    float3 12s ease-in-out infinite,
+    breathe3 8s ease-in-out infinite;
   animation-delay: -4s, 0s;
 }
 
@@ -3235,8 +3265,11 @@ h1 {
   width: 112px;
   height: 112px;
   opacity: 0.65;
-  filter: drop-shadow(0 0 12px rgb(255 255 255 / 30%)) saturate(1.0) hue-rotate(8deg);
-  animation: float4 9s ease-in-out infinite, breathe4 5.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgb(255 255 255 / 30%)) saturate(1)
+    hue-rotate(8deg);
+  animation:
+    float4 9s ease-in-out infinite,
+    breathe4 5.5s ease-in-out infinite;
   animation-delay: -6s, 0s;
 }
 
@@ -3297,23 +3330,47 @@ h1 {
 
 /* Subtle opacity breathing to enhance variation without fighting JS transforms */
 @keyframes breathe1 {
-  0%, 100% { opacity: 0.50; }
-  50% { opacity: 0.62; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.62;
+  }
 }
 
 @keyframes breathe2 {
-  0%, 100% { opacity: 0.64; }
-  50% { opacity: 0.78; }
+  0%,
+  100% {
+    opacity: 0.64;
+  }
+
+  50% {
+    opacity: 0.78;
+  }
 }
 
 @keyframes breathe3 {
-  0%, 100% { opacity: 0.78; }
-  50% { opacity: 0.92; }
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+
+  50% {
+    opacity: 0.92;
+  }
 }
 
 @keyframes breathe4 {
-  0%, 100% { opacity: 0.58; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 0.58;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* * Light theme adjustments */
@@ -3428,12 +3485,10 @@ h1 {
     width: 64px;
     height: 64px;
   }
-
 }
 
 /* Limit global button resets to layout regions to avoid module collisions */
 .layout button,
 .main-content button {
   /* move previous global button declarations here if needed */
-
 }

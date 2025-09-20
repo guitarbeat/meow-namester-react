@@ -5,7 +5,13 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { supabase, deleteName, catNamesAPI, tournamentsAPI, hiddenNamesAPI } from '../../../backend/api/supabaseClient';
+import {
+  supabase,
+  deleteName,
+  catNamesAPI,
+  tournamentsAPI,
+  hiddenNamesAPI
+} from '../../../backend/api/supabaseClient';
 import useToast from '../../core/hooks/useToast';
 import { FILTER_OPTIONS } from '../../core/constants';
 import { ErrorService } from '../../shared/services/errorService';
@@ -431,12 +437,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
         const result = await hiddenNamesAPI.hideNames(userName, nameIds);
 
         if (result.success) {
-          showSuccess(`Hidden ${result.processed} name${result.processed !== 1 ? 's' : ''}`);
+          showSuccess(
+            `Hidden ${result.processed} name${result.processed !== 1 ? 's' : ''}`
+          );
 
           // Update local state optimistically
           setHiddenNames((prev) => {
             const newSet = new Set(prev);
-            nameIds.forEach(id => newSet.add(id));
+            nameIds.forEach((id) => newSet.add(id));
             return newSet;
           });
 
@@ -473,12 +481,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
         const result = await hiddenNamesAPI.unhideNames(userName, nameIds);
 
         if (result.success) {
-          showSuccess(`Unhidden ${result.processed} name${result.processed !== 1 ? 's' : ''}`);
+          showSuccess(
+            `Unhidden ${result.processed} name${result.processed !== 1 ? 's' : ''}`
+          );
 
           // Update local state optimistically
           setHiddenNames((prev) => {
             const newSet = new Set(prev);
-            nameIds.forEach(id => newSet.delete(id));
+            nameIds.forEach((id) => newSet.delete(id));
             return newSet;
           });
 
@@ -531,10 +541,12 @@ const Profile = ({ userName, onStartNewTournament }) => {
           <p>
             {!supabase
               ? 'Database not configured. Please set up Supabase environment variables to view your profile data.'
-              : 'No names found in your profile. Start a tournament to begin collecting data!'
-            }
+              : 'No names found in your profile. Start a tournament to begin collecting data!'}
           </p>
-          <button onClick={onStartNewTournament} className={styles.primaryButton}>
+          <button
+            onClick={onStartNewTournament}
+            className={styles.primaryButton}
+          >
             Start New Tournament
           </button>
         </div>

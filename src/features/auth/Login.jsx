@@ -160,9 +160,7 @@ function Login({ onLogin }) {
             <span className={styles.stepNumber}>2</span>
             <span className={styles.stepText}>Create Your Judge Profile</span>
           </div>
-          <h1 className={styles.welcomeTitle}>
-            Ready to Judge the Names?
-          </h1>
+          <h1 className={styles.welcomeTitle}>Ready to Judge the Names?</h1>
           <picture>
             <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
             <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
@@ -176,7 +174,8 @@ function Login({ onLogin }) {
             />
           </picture>
           <p className={styles.welcomeText}>
-            Now it&apos;s your turn! Enter your name to start judging cat names and help find the perfect one.
+            Now it&apos;s your turn! Enter your name to start judging cat names
+            and help find the perfect one.
           </p>
         </div>
 

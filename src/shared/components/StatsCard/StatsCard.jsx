@@ -23,7 +23,9 @@ function StatsCard({
     styles.card,
     variant !== 'default' && styles[variant],
     className
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div

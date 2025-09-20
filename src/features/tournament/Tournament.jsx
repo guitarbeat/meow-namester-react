@@ -36,7 +36,10 @@ function useAudioManager() {
 
   const musicTracks = useMemo(
     () => [
-      { path: '/assets/sounds/AdhesiveWombat - Night Shade.mp3', name: 'Night Shade' },
+      {
+        path: '/assets/sounds/AdhesiveWombat - Night Shade.mp3',
+        name: 'Night Shade'
+      },
       { path: '/assets/sounds/MiseryBusiness.mp3', name: 'Misery Business' },
       { path: '/assets/sounds/what-is-love.mp3', name: 'What is Love' },
       {
@@ -524,7 +527,6 @@ function TournamentContent({
   if (process.env.NODE_ENV === 'development') {
     const now = Date.now();
     if (now - lastRenderLogRef.current > 500) {
-
       console.debug('[DEV] 🎮 Tournament: render', {
         namesCount: names?.length || 0,
         randomizedCount: randomizedNames?.length || 0,
@@ -540,7 +542,9 @@ function TournamentContent({
 
   // * Undo window (2.5s)
   const [undoExpiresAt, setUndoExpiresAt] = useState(null);
-  const undoRemainingMs = undoExpiresAt ? Math.max(0, undoExpiresAt - Date.now()) : 0;
+  const undoRemainingMs = undoExpiresAt
+    ? Math.max(0, undoExpiresAt - Date.now())
+    : 0;
   const canUndoNow = !!undoExpiresAt && undoRemainingMs > 0;
   useEffect(() => {
     if (!undoExpiresAt) return;
@@ -580,8 +584,8 @@ function TournamentContent({
   );
 
   // * Handle vote with animation
-    const handleVoteWithAnimation = useCallback(
-      async (option) => {
+  const handleVoteWithAnimation = useCallback(
+    async (option) => {
       if (isProcessing || isTransitioning || isError) return;
 
       // Rate limiting check
@@ -673,32 +677,32 @@ function TournamentContent({
         setIsTransitioning(false);
       }
     },
-      [
-        isProcessing,
-        isTransitioning,
-        isError,
-        audioManager,
-        updateMatchResult,
-        handleVote,
-        onVote,
-        currentMatch,
-        showError,
-        setIsProcessing,
-        setIsTransitioning,
-        setSelectedOption,
-        setVotingError
-      ]
-    );
+    [
+      isProcessing,
+      isTransitioning,
+      isError,
+      audioManager,
+      updateMatchResult,
+      handleVote,
+      onVote,
+      currentMatch,
+      showError,
+      setIsProcessing,
+      setIsTransitioning,
+      setSelectedOption,
+      setVotingError
+    ]
+  );
 
   // * Handle name card click
-    const handleNameCardClick = useCallback(
-      (option) => {
-        if (isProcessing || isTransitioning) return;
-        setSelectedOption(option);
-        handleVoteWithAnimation(option);
-      },
-      [isProcessing, isTransitioning, handleVoteWithAnimation, setSelectedOption]
-    );
+  const handleNameCardClick = useCallback(
+    (option) => {
+      if (isProcessing || isTransitioning) return;
+      setSelectedOption(option);
+      handleVoteWithAnimation(option);
+    },
+    [isProcessing, isTransitioning, handleVoteWithAnimation, setSelectedOption]
+  );
 
   // * Handle end early
   const handleEndEarly = useCallback(async () => {
@@ -716,9 +720,9 @@ function TournamentContent({
   }, [getCurrentRatings, onComplete, setIsProcessing]);
 
   // * Handle vote retry
-    const handleVoteRetry = useCallback(() => {
-      setVotingError(null);
-    }, [setVotingError]);
+  const handleVoteRetry = useCallback(() => {
+    setVotingError(null);
+  }, [setVotingError]);
 
   // * Keyboard controls
   useKeyboardControls(
@@ -759,7 +763,8 @@ function TournamentContent({
         if (typeof vote.result === 'number') {
           if (vote.result < -0.1) winner = -1;
           else if (vote.result > 0.1) winner = 1;
-          else if (Math.abs(vote.result) <= 0.1) winner = 0; // tie
+          else if (Math.abs(vote.result) <= 0.1)
+            winner = 0; // tie
           else winner = 2; // skipped/other
         } else {
           winner = 2;
@@ -767,7 +772,10 @@ function TournamentContent({
       }
 
       const matchNumber = vote?.matchNumber ?? index + 1;
-      const round = Math.max(1, Math.ceil(matchNumber / Math.max(1, matchesPerRound)));
+      const round = Math.max(
+        1,
+        Math.ceil(matchNumber / Math.max(1, matchesPerRound))
+      );
 
       return {
         id: matchNumber,

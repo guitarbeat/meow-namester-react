@@ -9,7 +9,17 @@ import styles from './NameStatsTooltip.module.css';
 function NameStatsTooltip({ nameData, isVisible, position }) {
   if (!nameData || !isVisible) return null;
 
-  const { name, description, rating, wins, losses, totalMatches, winRate, rank, categories } = nameData;
+  const {
+    name,
+    description,
+    rating,
+    wins,
+    losses,
+    totalMatches,
+    winRate,
+    rank,
+    categories
+  } = nameData;
 
   return (
     <div
@@ -25,9 +35,7 @@ function NameStatsTooltip({ nameData, isVisible, position }) {
           <span className={styles.rankBadge}>#{rank}</span>
         </div>
 
-        {description && (
-          <p className={styles.description}>{description}</p>
-        )}
+        {description && <p className={styles.description}>{description}</p>}
 
         <div className={styles.statsGrid}>
           <div className={styles.statItem}>

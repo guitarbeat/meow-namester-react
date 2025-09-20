@@ -94,13 +94,18 @@
 @media (width <= 768px) {
   /* Ensure main content doesn't overlap with fixed navbar */
   body .main-content {
-    padding-bottom: var(--mobile-content-padding); /* Add bottom padding for floating elements */
+    padding-bottom: var(
+      --mobile-content-padding
+    ); /* Add bottom padding for floating elements */
+
     margin-top: var(--mobile-content-padding); /* Increased from 65px */
   }
 
   /* Improve navbar height for better touch targets */
   body .navbar {
-    height: var(--mobile-navbar-height); /* Slightly increased for better touch targets */
+    height: var(
+      --mobile-navbar-height
+    ); /* Slightly increased for better touch targets */
   }
 
   /* Ensure scroll-to-top button doesn't overlap content */
@@ -113,7 +118,10 @@
   body .floating-element,
   body .fixed-bottom,
   body .sticky-bottom {
-    bottom: max(var(--mobile-safe-spacing), env(safe-area-inset-bottom) + var(--mobile-safe-spacing));
+    bottom: max(
+      var(--mobile-safe-spacing),
+      env(safe-area-inset-bottom) + var(--mobile-safe-spacing)
+    );
   }
 }
 
@@ -124,7 +132,9 @@
   }
 
   body .navbar {
-    height: var(--mobile-navbar-height-small); /* Standard height for small screens */
+    height: var(
+      --mobile-navbar-height-small
+    ); /* Standard height for small screens */
   }
 
   body .scroll-to-top {
@@ -137,18 +147,9 @@
 @supports (padding: max(0px)) {
   @media (width <= 768px) {
     body .main-content {
-      padding-right: max(
-        var(--space-4, 1rem),
-        env(safe-area-inset-right)
-      );
-      padding-bottom: max(
-        var(--space-4, 1rem),
-        env(safe-area-inset-bottom)
-      );
-      padding-left: max(
-        var(--space-4, 1rem),
-        env(safe-area-inset-left)
-      );
+      padding-right: max(var(--space-4, 1rem), env(safe-area-inset-right));
+      padding-bottom: max(var(--space-4, 1rem), env(safe-area-inset-bottom));
+      padding-left: max(var(--space-4, 1rem), env(safe-area-inset-left));
     }
 
     body .navbar {
@@ -157,30 +158,33 @@
     }
 
     body .scroll-to-top {
-      right: max(var(--mobile-safe-spacing), env(safe-area-inset-right) + var(--mobile-safe-spacing));
-      bottom: max(var(--mobile-safe-spacing), env(safe-area-inset-bottom) + var(--mobile-safe-spacing));
+      right: max(
+        var(--mobile-safe-spacing),
+        env(safe-area-inset-right) + var(--mobile-safe-spacing)
+      );
+      bottom: max(
+        var(--mobile-safe-spacing),
+        env(safe-area-inset-bottom) + var(--mobile-safe-spacing)
+      );
     }
   }
 
   @media (width <= 430px) {
     body .main-content {
-      padding-right: max(
-        var(--space-3, 0.75rem),
-        env(safe-area-inset-right)
-      );
-      padding-bottom: max(
-        var(--space-3, 0.75rem),
-        env(safe-area-inset-bottom)
-      );
-      padding-left: max(
-        var(--space-3, 0.75rem),
-        env(safe-area-inset-left)
-      );
+      padding-right: max(var(--space-3, 0.75rem), env(safe-area-inset-right));
+      padding-bottom: max(var(--space-3, 0.75rem), env(safe-area-inset-bottom));
+      padding-left: max(var(--space-3, 0.75rem), env(safe-area-inset-left));
     }
 
     body .scroll-to-top {
-      right: max(var(--mobile-safe-spacing-small), env(safe-area-inset-right) + var(--mobile-safe-spacing-small));
-      bottom: max(var(--mobile-safe-spacing-small), env(safe-area-inset-bottom) + var(--mobile-safe-spacing-small));
+      right: max(
+        var(--mobile-safe-spacing-small),
+        env(safe-area-inset-right) + var(--mobile-safe-spacing-small)
+      );
+      bottom: max(
+        var(--mobile-safe-spacing-small),
+        env(safe-area-inset-bottom) + var(--mobile-safe-spacing-small)
+      );
     }
   }
 }
@@ -294,7 +298,9 @@
   }
 
   body .navbar {
-    height: var(--mobile-navbar-height-small); /* Standard height for landscape */
+    height: var(
+      --mobile-navbar-height-small
+    ); /* Standard height for landscape */
   }
 
   body .scroll-to-top {

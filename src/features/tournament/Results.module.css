@@ -17,7 +17,7 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .header h1 {
@@ -86,9 +86,11 @@
   gap: 1.5rem;
   padding: 1rem;
   margin: 2rem 0;
-  background: linear-gradient(135deg, 
-    rgb(255 255 255 / 5%) 0%, 
-    rgb(255 255 255 / 2%) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 5%) 0%,
+    rgb(255 255 255 / 2%) 100%
+  );
   border: 1px solid rgb(255 255 255 / 10%);
   border-radius: 16px;
   backdrop-filter: blur(10px);

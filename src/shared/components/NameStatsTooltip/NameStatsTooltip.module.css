@@ -8,6 +8,17 @@
   animation: tooltipFadeIn 0.2s ease-out;
 }
 
+/* Mobile-specific tooltip positioning */
+@media (width <= 768px) {
+  .tooltip {
+    position: fixed;
+    top: 50% !important;
+    left: 50% !important;
+    max-width: min(90vw, 320px);
+    transform: translate(-50%, -50%);
+  }
+}
+
 @keyframes tooltipFadeIn {
   from {
     opacity: 0;
@@ -145,22 +156,65 @@
 /* Mobile responsiveness */
 @media (width <= 480px) {
   .tooltip {
-    max-width: 280px;
+    position: fixed;
+    top: 50% !important;
+    left: 50% !important;
+    max-width: min(90vw, 300px);
+    transform: translate(-50%, -50%);
   }
-  
+
   .tooltipContent {
-    padding: 0.75rem;
+    padding: 1rem;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgb(0 0 0 / 40%);
   }
-  
+
+  .nameTitle {
+    font-size: 1.1rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .statValue {
+    font-size: 1rem;
+  }
+
+  .statLabel {
+    font-size: 0.8rem;
+  }
+
+  .categoryTag {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Very small screens */
+@media (width <= 320px) {
+  .tooltip {
+    max-width: 95vw;
+  }
+
+  .tooltipContent {
+    padding: 0.875rem;
+  }
+
   .nameTitle {
     font-size: 1rem;
   }
-  
+
   .statsGrid {
     gap: 0.5rem;
   }
-  
+
   .statValue {
     font-size: 0.9rem;
+  }
+
+  .statLabel {
+    font-size: 0.75rem;
   }
 }

@@ -684,7 +684,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 55%) 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0%) 0%,
+    rgb(0 0 0 / 55%) 100%
+  );
   opacity: 0;
   transition: opacity var(--duration-normal) var(--ease-out);
 }
@@ -1092,8 +1096,13 @@
   transform: translateY(-50%) scale(1.05);
 }
 
-.lightboxNav.left { left: var(--space-4); }
-.lightboxNav.right { right: var(--space-4); }
+.lightboxNav.left {
+  left: var(--space-4);
+}
+
+.lightboxNav.right {
+  right: var(--space-4);
+}
 
 .lightboxClose {
   position: absolute;
@@ -1114,7 +1123,9 @@
   transition: var(--transition-all);
 }
 
-.lightboxClose:hover { background: var(--overlay-dark); }
+.lightboxClose:hover {
+  background: var(--overlay-dark);
+}
 
 .lightboxCounter {
   position: absolute;
@@ -1349,7 +1360,8 @@
 }
 
 /* Swipe Mode Toggle Button */
-.swipeModeToggleButton {  }
+.swipeModeToggleButton {
+}
 
 .swipeModeToggleButton:hover {
   color: white;

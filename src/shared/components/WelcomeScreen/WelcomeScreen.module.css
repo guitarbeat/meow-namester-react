@@ -45,7 +45,9 @@
   overflow: hidden;
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 }
 
 .welcomeWrapper.visible {
@@ -56,13 +58,17 @@
 .welcomeWrapper.animating {
   opacity: 0;
   transform: translateY(-20px);
-  transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+  transition:
+    opacity 0.5s ease-in,
+    transform 0.5s ease-in;
 }
 
 .welcomeWrapper.transitioning {
   opacity: 0.7;
   transform: scale(0.95);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
 
 .backgroundContainer {
@@ -77,12 +83,11 @@
 .backgroundImage {
   width: 100%;
   height: 100%;
-  background-image: 
-    image-set(
-      "/assets/images/IMG_5071.avif" type("image/avif"),
-      "/assets/images/IMG_5071.webp" type("image/webp"),
-      "/assets/images/IMG_5071.JPG" type("image/jpeg")
-    );
+  background-image: image-set(
+    "/assets/images/IMG_5071.avif" type("image/avif"),
+    "/assets/images/IMG_5071.webp" type("image/webp"),
+    "/assets/images/IMG_5071.JPG" type("image/jpeg")
+  );
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -122,7 +127,8 @@
 }
 
 @keyframes particleFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
 
@@ -243,7 +249,6 @@
   text-align: center;
 }
 
-
 .catImageContainer {
   position: relative;
   display: inline-block;
@@ -271,7 +276,8 @@
 }
 
 @keyframes catCelebration {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
 
@@ -298,7 +304,8 @@
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
@@ -323,7 +330,7 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  font-family: 'Josefin Slab', serif;
+  font-family: "Josefin Slab", serif;
   font-size: clamp(1.3rem, 3.5vw, 2.2rem);
   font-weight: 600;
   color: #fff;
@@ -348,7 +355,8 @@
 }
 
 @keyframes sparkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.7;
     transform: scale(1) rotate(0deg);
   }
@@ -360,7 +368,8 @@
 }
 
 @keyframes sparkleCelebration {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1.2) rotate(0deg);
   }
@@ -382,7 +391,8 @@
 }
 
 @keyframes titleCelebration {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
 
@@ -396,10 +406,16 @@
   padding: clamp(1rem, 3vw, 2rem);
   margin: clamp(0.5rem, 2vw, 1.5rem) 0;
   overflow: hidden;
-  background: linear-gradient(135deg, rgb(255 255 255 / 95%), rgb(248 250 252 / 95%));
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 95%),
+    rgb(248 250 252 / 95%)
+  );
   border: 2px solid rgb(255 255 255 / 30%);
   border-radius: 20px;
-  box-shadow: 0 15px 40px rgb(0 0 0 / 25%), 0 5px 15px rgb(0 0 0 / 10%);
+  box-shadow:
+    0 15px 40px rgb(0 0 0 / 25%),
+    0 5px 15px rgb(0 0 0 / 10%);
   backdrop-filter: blur(15px);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -410,8 +426,13 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  content: '';
-  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 20%), transparent);
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 20%),
+    transparent
+  );
   transition: left 0.6s ease;
 }
 
@@ -420,25 +441,32 @@
 }
 
 .catNameDisplayCelebration {
-  box-shadow: 0 20px 50px rgb(232 191 118 / 30%), 0 10px 25px rgb(0 0 0 / 20%);
+  box-shadow:
+    0 20px 50px rgb(232 191 118 / 30%),
+    0 10px 25px rgb(0 0 0 / 20%);
   animation: nameDisplayCelebration 2s ease-in-out infinite;
 }
 
 @keyframes nameDisplayCelebration {
-  0%, 100% {
-    box-shadow: 0 20px 50px rgb(232 191 118 / 30%), 0 10px 25px rgb(0 0 0 / 20%);
+  0%,
+  100% {
+    box-shadow:
+      0 20px 50px rgb(232 191 118 / 30%),
+      0 10px 25px rgb(0 0 0 / 20%);
     transform: scale(1);
   }
 
   50% {
-    box-shadow: 0 25px 60px rgb(232 191 118 / 40%), 0 15px 30px rgb(0 0 0 / 25%);
+    box-shadow:
+      0 25px 60px rgb(232 191 118 / 40%),
+      0 15px 30px rgb(0 0 0 / 25%);
     transform: scale(1.02);
   }
 }
 
 .catNameText {
   display: block;
-  font-family: 'Comic Neue', cursive;
+  font-family: "Comic Neue", cursive;
   font-size: clamp(1.1rem, 2.5vw, 1.6rem);
   font-weight: 700;
   line-height: 1.3;
@@ -457,12 +485,15 @@
 
 .catNameSubtextCelebration {
   color: rgb(232 191 118 / 95%);
-  text-shadow: 1px 1px 3px rgb(0 0 0 / 70%), 0 0 10px rgb(232 191 118 / 30%);
+  text-shadow:
+    1px 1px 3px rgb(0 0 0 / 70%),
+    0 0 10px rgb(232 191 118 / 30%);
   animation: subtextCelebration 2s ease-in-out infinite;
 }
 
 @keyframes subtextCelebration {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
 
@@ -476,10 +507,16 @@
   padding: clamp(1.5rem, 4vw, 2.5rem);
   overflow: hidden;
   text-align: center;
-  background: linear-gradient(135deg, rgb(255 255 255 / 95%), rgb(248 250 252 / 95%));
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 95%),
+    rgb(248 250 252 / 95%)
+  );
   border: 1px solid rgb(255 255 255 / 20%);
   border-radius: 25px;
-  box-shadow: 0 25px 50px rgb(0 0 0 / 25%), 0 10px 20px rgb(0 0 0 / 10%);
+  box-shadow:
+    0 25px 50px rgb(0 0 0 / 25%),
+    0 10px 20px rgb(0 0 0 / 10%);
   backdrop-filter: blur(15px);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -490,14 +527,22 @@
   right: 0;
   left: 0;
   height: 3px;
-  content: '';
-  background: linear-gradient(90deg, #e8bf76, #f1a438, #e74c3c, #3498db, #9b59b6);
+  content: "";
+  background: linear-gradient(
+    90deg,
+    #e8bf76,
+    #f1a438,
+    #e74c3c,
+    #3498db,
+    #9b59b6
+  );
   background-size: 200% 100%;
   animation: gradientShift 3s ease-in-out infinite;
 }
 
 @keyframes gradientShift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
 
@@ -507,12 +552,15 @@
 }
 
 .actionSectionCelebration {
-  box-shadow: 0 30px 60px rgb(232 191 118 / 20%), 0 15px 30px rgb(0 0 0 / 15%);
+  box-shadow:
+    0 30px 60px rgb(232 191 118 / 20%),
+    0 15px 30px rgb(0 0 0 / 15%);
   animation: actionSectionCelebration 2s ease-in-out infinite;
 }
 
 @keyframes actionSectionCelebration {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
 
@@ -534,7 +582,9 @@
   background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226);
   border: none;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgb(231 76 60 / 40%), 0 4px 10px rgb(0 0 0 / 20%);
+  box-shadow:
+    0 8px 25px rgb(231 76 60 / 40%),
+    0 4px 10px rgb(0 0 0 / 20%);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation: pulseGlow 2s ease-in-out infinite;
 }
@@ -545,8 +595,13 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  content: '';
-  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 20%), transparent);
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 20%),
+    transparent
+  );
   transition: left 0.6s ease;
 }
 
@@ -556,31 +611,38 @@
 
 .continueButtonCelebration {
   background: linear-gradient(135deg, #e8bf76, #f1a438, #e74c3c);
-  box-shadow: 0 12px 35px rgb(232 191 118 / 50%), 0 6px 15px rgb(0 0 0 / 25%);
+  box-shadow:
+    0 12px 35px rgb(232 191 118 / 50%),
+    0 6px 15px rgb(0 0 0 / 25%);
   animation: buttonCelebration 1.5s ease-in-out infinite;
 }
 
 @keyframes buttonCelebration {
-  0%, 100% {
-    box-shadow: 0 12px 35px rgb(232 191 118 / 50%), 0 6px 15px rgb(0 0 0 / 25%);
+  0%,
+  100% {
+    box-shadow:
+      0 12px 35px rgb(232 191 118 / 50%),
+      0 6px 15px rgb(0 0 0 / 25%);
     transform: scale(1);
   }
 
   50% {
-    box-shadow: 0 15px 40px rgb(232 191 118 / 60%), 0 8px 20px rgb(0 0 0 / 30%);
+    box-shadow:
+      0 15px 40px rgb(232 191 118 / 60%),
+      0 8px 20px rgb(0 0 0 / 30%);
     transform: scale(1.05);
   }
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 6px 20px rgb(231 76 60 / 40%);
   }
 
   50% {
     box-shadow: 0 8px 25px rgb(231 76 60 / 60%);
   }
-
 }
 
 .continueButton:hover:not(:disabled) {
@@ -624,7 +686,8 @@
 }
 
 @keyframes emojiBounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
 
@@ -634,7 +697,8 @@
 }
 
 @keyframes emojiCelebration {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1.2) rotate(0deg);
   }
 
@@ -694,8 +758,7 @@
     gap: clamp(2rem, 4vw, 3rem);
     max-width: min(80vw, 800px);
   }
-  
-  
+
   .catImage {
     width: clamp(120px, 12vw, 180px);
     height: clamp(120px, 12vw, 180px);
@@ -719,104 +782,375 @@
   }
 }
 
+/* Mobile-specific improvements */
+@media (width <= 768px) {
+  /* Improve scrolling on mobile */
+  .contentContainer {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-padding-top: 1rem;
+  }
+
+  /* Better touch targets */
+  .interactiveName {
+    min-width: 40px;
+    min-height: 36px;
+    padding: 6px 8px;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+
+  .continueButton {
+    min-height: 52px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  /* Improve text readability */
+  .catNameText {
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .catNameSubtext {
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* Add subtle mobile-specific visual feedback */
+  .interactiveName {
+    -webkit-tap-highlight-color: rgb(232 191 118 / 25%);
+    transition: all 0.2s ease;
+  }
+
+  .continueButton {
+    -webkit-tap-highlight-color: rgb(231 76 60 / 25%);
+    transition: all 0.2s ease;
+  }
+
+  /* Improve button press feedback */
+  .continueButton:active {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    box-shadow: 0 4px 15px rgb(231 76 60 / 40%);
+    transform: scale(0.98);
+  }
+
+  /* Better spacing for mobile content */
+  .mainContent {
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .catNameSection {
+    gap: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  /* Enhanced mobile visual hierarchy */
+  .catNameTitle {
+    margin-bottom: 0.75rem;
+  }
+
+  .catNameDisplay {
+    margin: clamp(1rem, 3vw, 1.5rem) 0;
+    box-shadow:
+      0 8px 25px rgb(0 0 0 / 15%),
+      0 3px 10px rgb(0 0 0 / 8%);
+  }
+
+  .actionSection {
+    margin-top: 1rem;
+    box-shadow:
+      0 10px 30px rgb(0 0 0 / 15%),
+      0 4px 12px rgb(0 0 0 / 8%);
+  }
+
+  /* Improve mobile typography */
+  .catNameTitle {
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-weight: 700;
+  }
+
+  .catNameText {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+  }
+
+  .catNameSubtext {
+    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+  }
+
+  .continueButton {
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+  }
+}
+
 /* Mobile portrait */
 @media (width <= 480px) {
   .contentContainer {
-    gap: clamp(1rem, 2vw, 1.5rem);
+    gap: clamp(1.5rem, 3vw, 2rem);
     max-width: 95vw;
-    padding: clamp(0.75rem, 2vw, 1.5rem);
+    padding: clamp(1.25rem, 3vw, 2rem);
   }
-  
+
   .particle {
     width: 2px !important;
     height: 2px !important;
   }
-  
+
   .confetti {
     width: 6px;
     height: 6px;
   }
-  
+
   .catImageContainer {
-    margin-bottom: 0.5rem;
+    position: relative;
+    margin-bottom: 1rem;
   }
-  
+
   .catImage {
-    width: clamp(60px, 12vw, 100px);
-    height: clamp(60px, 12vw, 100px);
+    width: clamp(80px, 16vw, 120px);
+    height: clamp(80px, 16vw, 120px);
+    border-width: 4px;
+    box-shadow:
+      0 6px 20px rgb(0 0 0 / 25%),
+      0 2px 8px rgb(0 0 0 / 15%);
   }
-  
+
   .catNameTitle {
-    font-size: clamp(1.1rem, 3vw, 1.8rem);
+    margin-bottom: 0.75rem;
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    font-weight: 700;
   }
-  
+
   .titleSparkle {
-    font-size: 1em;
+    font-size: 1.2em;
+    animation-duration: 1.5s;
   }
-  
+
   .catNameDisplay {
-    padding: clamp(0.75rem, 2.5vw, 1.5rem);
-    border-radius: 15px;
-  }
-  
-  .catNameText {
-    font-size: clamp(1rem, 2.2vw, 1.4rem);
-  }
-  
-  .actionSection {
-    padding: clamp(1rem, 3vw, 2rem);
+    padding: clamp(1.25rem, 3.5vw, 2rem);
+    margin: clamp(1rem, 3vw, 1.5rem) 0;
+    border: 3px solid rgb(255 255 255 / 40%);
     border-radius: 20px;
+    box-shadow:
+      0 12px 30px rgb(0 0 0 / 20%),
+      0 4px 15px rgb(0 0 0 / 10%);
   }
-  
+
+  .catNameText {
+    font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .catNameSubtext {
+    margin-top: 0.75rem;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .actionSection {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 2px solid rgb(255 255 255 / 30%);
+    border-radius: 25px;
+    box-shadow:
+      0 15px 35px rgb(0 0 0 / 20%),
+      0 5px 15px rgb(0 0 0 / 10%);
+  }
+
   .continueButton {
-    padding: clamp(0.875rem, 2.2vw, 1.25rem) clamp(1.25rem, 3.5vw, 2rem);
-    font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+    min-height: 52px;
+    padding: clamp(1.1rem, 3vw, 1.5rem) clamp(1.75rem, 4.5vw, 2.5rem);
+    font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: 20px;
+    box-shadow:
+      0 8px 25px rgb(231 76 60 / 35%),
+      0 3px 10px rgb(0 0 0 / 15%);
+  }
+
+  .interactiveName {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 36px;
+    padding: 6px 10px;
+    margin: 0 2px;
+    font-weight: 600;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .buttonContent {
+    gap: 0.75rem;
+  }
+
+  .buttonEmoji {
+    font-size: 1.3rem;
+  }
+
+  .explanationText {
+    padding: 1rem;
+    margin-top: 0.75rem;
+    background: rgb(52 152 219 / 15%);
+    border: 1px solid rgb(52 152 219 / 25%);
     border-radius: 15px;
   }
-  
-  .interactiveName {
-    padding: 1px 2px;
-    margin: 0 0.5px;
+
+  .explanationText p {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.6;
   }
-  
+
   /* Reduce animations on mobile for better performance */
   .particle {
     animation: none;
   }
-  
+
   .confetti {
     animation-duration: 2s;
   }
-  
+
   .catImageCelebration {
     animation-duration: 1.5s;
   }
-  
+
   .buttonEmoji {
     animation-duration: 1.5s;
+  }
+
+  /* Improve touch interactions */
+  .continueButton:active {
+    box-shadow:
+      0 4px 15px rgb(231 76 60 / 40%),
+      0 2px 8px rgb(0 0 0 / 20%);
+    transform: translateY(-2px) scale(0.96);
+  }
+
+  .interactiveName:active {
+    background: linear-gradient(
+      135deg,
+      rgb(232 191 118 / 40%),
+      rgb(241 164 56 / 40%)
+    );
+    border-color: rgb(232 191 118 / 60%);
+    transform: scale(0.92);
+  }
+
+  /* Enhanced mobile visual effects */
+  .catImageGlow {
+    animation-duration: 2.5s;
+  }
+
+  .buttonGlow {
+    animation-duration: 2s;
   }
 }
 
 /* Very small screens */
 @media (width <= 320px) {
   .contentContainer {
-    gap: 1rem;
+    gap: 1.25rem;
     max-width: 98vw;
-    padding: 0.5rem;
+    padding: 1rem;
   }
-  
-  
+
   .catImage {
-    width: 70px;
-    height: 70px;
+    width: 85px;
+    height: 85px;
+    border-width: 3px;
+    box-shadow:
+      0 4px 15px rgb(0 0 0 / 20%),
+      0 2px 6px rgb(0 0 0 / 10%);
   }
-  
+
   .catNameTitle {
-    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
   }
-  
+
   .catNameText {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .catNameDisplay {
+    padding: 1rem;
+    border: 2px solid rgb(255 255 255 / 30%);
+    border-radius: 18px;
+    box-shadow:
+      0 8px 20px rgb(0 0 0 / 15%),
+      0 3px 8px rgb(0 0 0 / 8%);
+  }
+
+  .actionSection {
+    padding: 1.25rem;
+    border: 2px solid rgb(255 255 255 / 25%);
+    border-radius: 20px;
+    box-shadow:
+      0 10px 25px rgb(0 0 0 / 15%),
+      0 4px 10px rgb(0 0 0 / 8%);
+  }
+
+  .continueButton {
+    min-height: 48px;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 18px;
+    box-shadow:
+      0 6px 20px rgb(231 76 60 / 30%),
+      0 2px 8px rgb(0 0 0 / 12%);
+  }
+
+  .interactiveName {
+    min-width: 36px;
+    min-height: 32px;
+    padding: 5px 8px;
     font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+  }
+
+  .explanationText {
+    padding: 0.875rem;
+    border-radius: 12px;
+  }
+
+  .explanationText p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .catNameSubtext {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* Enhanced touch targets for very small screens */
+  .interactiveName {
+    min-width: 40px;
+    min-height: 36px;
+  }
+
+  .continueButton {
+    min-height: 50px;
+  }
+
+  /* Better spacing */
+  .mainContent {
+    gap: 1.5rem;
+  }
+
+  .catNameSection {
+    gap: 1rem;
   }
 }
 
@@ -826,11 +1160,23 @@
     gap: clamp(0.75rem, 2vh, 1.5rem);
     max-height: 95vh;
   }
-  
-  
+
   .catImage {
     width: clamp(60px, 12vh, 100px);
     height: clamp(60px, 12vh, 100px);
+  }
+
+  .catNameTitle {
+    font-size: clamp(1rem, 2.5vh, 1.6rem);
+  }
+
+  .catNameText {
+    font-size: clamp(0.95rem, 2vh, 1.3rem);
+  }
+
+  .continueButton {
+    padding: clamp(0.75rem, 2vh, 1rem) clamp(1rem, 3vh, 1.5rem);
+    font-size: clamp(0.9rem, 2vh, 1.1rem);
   }
 }
 
@@ -838,21 +1184,245 @@
 @media (height <= 500px) and (orientation: landscape) {
   .welcomeWrapper {
     align-items: flex-start;
-    padding-top: 2vh;
+    padding-top: 0.5vh;
   }
-  
+
   .contentContainer {
-    gap: clamp(0.5rem, 1.5vh, 1rem);
+    flex-direction: row;
+    gap: clamp(1rem, 2.5vh, 1.5rem);
+    align-items: center;
+    justify-content: space-between;
     max-height: 96vh;
+    padding: clamp(1rem, 2vh, 1.5rem);
   }
-  
+
   .mainContent {
-    gap: clamp(0.5rem, 1.5vh, 1rem);
+    flex: 1;
+    gap: clamp(1rem, 2.5vh, 1.5rem);
+    max-width: 65%;
   }
-  
+
   .catImage {
-    width: clamp(50px, 10vh, 80px);
-    height: clamp(50px, 10vh, 80px);
+    width: clamp(70px, 14vh, 100px);
+    height: clamp(70px, 14vh, 100px);
+    border-width: 3px;
+    box-shadow:
+      0 4px 15px rgb(0 0 0 / 20%),
+      0 2px 6px rgb(0 0 0 / 10%);
+  }
+
+  .catNameTitle {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.1rem, 2.8vh, 1.6rem);
+    font-weight: 700;
+  }
+
+  .catNameDisplay {
+    padding: clamp(1rem, 2.5vh, 1.5rem);
+    margin: clamp(0.75rem, 2vh, 1.25rem) 0;
+    border: 2px solid rgb(255 255 255 / 30%);
+    border-radius: 18px;
+    box-shadow:
+      0 6px 20px rgb(0 0 0 / 15%),
+      0 2px 8px rgb(0 0 0 / 8%);
+  }
+
+  .catNameText {
+    font-size: clamp(1.1rem, 2.5vh, 1.4rem);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .catNameSubtext {
+    font-size: clamp(0.9rem, 2vh, 1.1rem);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .actionSection {
+    flex: 0 0 32%;
+    padding: clamp(1.25rem, 3vh, 1.75rem);
+    border: 2px solid rgb(255 255 255 / 25%);
+    border-radius: 20px;
+    box-shadow:
+      0 8px 25px rgb(0 0 0 / 15%),
+      0 3px 10px rgb(0 0 0 / 8%);
+  }
+
+  .continueButton {
+    min-height: 44px;
+    padding: clamp(0.875rem, 2.2vh, 1.125rem) clamp(1.25rem, 3.5vh, 1.75rem);
+    font-size: clamp(1rem, 2.5vh, 1.2rem);
+    font-weight: 700;
+    border-radius: 16px;
+    box-shadow:
+      0 6px 20px rgb(231 76 60 / 30%),
+      0 2px 8px rgb(0 0 0 / 12%);
+  }
+
+  .interactiveName {
+    min-width: 36px;
+    min-height: 32px;
+    padding: 4px 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .explanationText {
+    padding: 0.75rem;
+    border-radius: 12px;
+  }
+
+  .explanationText p {
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .buttonContent {
+    gap: 0.5rem;
+  }
+
+  .buttonEmoji {
+    font-size: 1.1rem;
+  }
+}
+
+/* Performance optimizations for mobile */
+@media (width <= 768px) {
+  /* Reduce particle count on mobile */
+  .particle {
+    animation-duration: 6s;
+  }
+
+  /* Optimize animations for mobile */
+  .catImageCelebration {
+    animation-duration: 1.5s;
+  }
+
+  .buttonEmoji {
+    animation-duration: 1.5s;
+  }
+
+  /* Reduce blur effects for better performance */
+  .catNameDisplay,
+  .actionSection {
+    backdrop-filter: blur(6px);
+  }
+
+  .tooltipContent {
+    backdrop-filter: blur(4px);
+  }
+
+  /* Optimize transforms for mobile */
+  .interactiveName,
+  .continueButton,
+  .catImage {
+    will-change: transform;
+  }
+
+  /* Reduce complex animations on mobile */
+  .catImageGlow {
+    animation-duration: 3s;
+  }
+
+  .buttonGlow {
+    animation-duration: 2.5s;
+  }
+
+  /* Optimize box shadows for mobile */
+  .catNameDisplay {
+    box-shadow:
+      0 8px 20px rgb(0 0 0 / 15%),
+      0 3px 8px rgb(0 0 0 / 8%);
+  }
+
+  .actionSection {
+    box-shadow:
+      0 10px 25px rgb(0 0 0 / 15%),
+      0 4px 10px rgb(0 0 0 / 8%);
+  }
+
+  .continueButton {
+    box-shadow:
+      0 6px 20px rgb(231 76 60 / 30%),
+      0 2px 8px rgb(0 0 0 / 12%);
+  }
+}
+
+/* Ultra-mobile performance optimizations */
+@media (width <= 480px) {
+  /* Disable expensive effects on very small screens */
+  .particleContainer {
+    display: none;
+  }
+
+  .celebrationContainer {
+    display: none;
+  }
+
+  /* Simplify animations */
+  .catImageGlow,
+  .buttonGlow {
+    animation: none;
+  }
+
+  /* Reduce backdrop blur for performance */
+  .catNameDisplay,
+  .actionSection {
+    backdrop-filter: blur(3px);
+  }
+
+  /* Optimize for low-end devices */
+  .welcomeWrapper {
+    contain: layout style paint;
+  }
+
+  .contentContainer {
+    contain: layout style;
+  }
+
+  /* Enhanced mobile typography */
+  .catNameTitle {
+    text-shadow: 2px 2px 4px rgb(0 0 0 / 80%);
+  }
+
+  .catNameSubtext {
+    text-shadow: 1px 1px 3px rgb(0 0 0 / 70%);
+  }
+
+  /* Better mobile contrast */
+  .catNameDisplay {
+    background: linear-gradient(
+      135deg,
+      rgb(255 255 255 / 98%),
+      rgb(248 250 252 / 98%)
+    );
+    border: 3px solid rgb(255 255 255 / 50%);
+  }
+
+  .actionSection {
+    background: linear-gradient(
+      135deg,
+      rgb(255 255 255 / 98%),
+      rgb(248 250 252 / 98%)
+    );
+    border: 2px solid rgb(255 255 255 / 40%);
+  }
+
+  /* Improved mobile button styling */
+  .continueButton {
+    background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226);
+    box-shadow:
+      0 6px 20px rgb(231 76 60 / 35%),
+      0 2px 8px rgb(0 0 0 / 15%);
+  }
+
+  .continueButton:active {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    box-shadow:
+      0 4px 15px rgb(231 76 60 / 40%),
+      0 2px 6px rgb(0 0 0 / 20%);
   }
 }
 
@@ -889,12 +1459,12 @@
     transition: none !important;
     animation: none !important;
   }
-  
+
   .continueButton::before,
   .catNameDisplay::before {
     display: none;
   }
-  
+
   .particleContainer,
   .celebrationContainer {
     display: none;
@@ -908,22 +1478,22 @@
     background: #fff;
     border: 3px solid #000;
   }
-  
+
   .actionSection {
     background: #fff;
     border: 3px solid #000;
   }
-  
+
   .continueButton {
     border: 3px solid #000;
   }
-  
+
   .interactiveName {
     color: #000;
     background: #fff;
     border: 2px solid #000;
   }
-  
+
   .interactiveName:hover {
     color: #fff;
     background: #000;
@@ -939,6 +1509,97 @@
 .interactiveName:focus-visible {
   outline: 2px solid #e8bf76;
   outline-offset: 1px;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .interactiveName:hover {
+    background: linear-gradient(
+      135deg,
+      rgb(232 191 118 / 10%),
+      rgb(241 164 56 / 10%)
+    );
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .interactiveName:active {
+    background: linear-gradient(
+      135deg,
+      rgb(232 191 118 / 40%),
+      rgb(241 164 56 / 40%)
+    );
+    border-color: rgb(232 191 118 / 60%);
+    box-shadow: 0 4px 12px rgb(232 191 118 / 30%);
+    transform: scale(0.92);
+  }
+
+  .continueButton:hover {
+    transform: none;
+  }
+
+  .continueButton:active {
+    box-shadow:
+      0 6px 20px rgb(231 76 60 / 40%),
+      0 3px 10px rgb(0 0 0 / 20%);
+    transform: translateY(-2px) scale(0.96);
+  }
+
+  .catImage:hover {
+    transform: none;
+  }
+
+  .catImage:active {
+    transform: scale(1.05) rotate(5deg);
+  }
+
+  /* Improve touch targets for mobile */
+  .interactiveName {
+    min-width: 44px;
+    min-height: 40px;
+    padding: 8px 10px;
+    border-radius: 10px;
+  }
+
+  .continueButton {
+    min-height: 56px;
+    border-radius: 22px;
+  }
+
+  /* Better spacing for touch */
+  .catNameDisplay {
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    margin: clamp(1.25rem, 3.5vw, 1.75rem) 0;
+  }
+
+  .actionSection {
+    padding: clamp(1.75rem, 4.5vw, 2.75rem);
+  }
+
+  /* Enhanced mobile visual feedback */
+  .interactiveName {
+    -webkit-tap-highlight-color: rgb(232 191 118 / 30%);
+    transition: all 0.15s ease;
+  }
+
+  .continueButton {
+    -webkit-tap-highlight-color: rgb(231 76 60 / 30%);
+    transition: all 0.15s ease;
+  }
+
+  /* Better mobile button styling */
+  .continueButton {
+    box-shadow:
+      0 8px 25px rgb(231 76 60 / 35%),
+      0 3px 10px rgb(0 0 0 / 15%);
+  }
+
+  .continueButton:active {
+    box-shadow:
+      0 4px 15px rgb(231 76 60 / 40%),
+      0 2px 8px rgb(0 0 0 / 20%);
+  }
 }
 
 /* Dark theme support */
@@ -1042,35 +1703,60 @@
   text-align: center;
 }
 
-
 /* Interactive name styles */
 .interactiveName {
   position: relative;
-  display: inline-block;
-  padding: 2px 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 28px;
+  padding: 3px 6px;
   margin: 0 1px;
+  text-align: center;
   cursor: pointer;
-  background: linear-gradient(135deg, rgb(232 191 118 / 10%), rgb(241 164 56 / 10%));
+  background: linear-gradient(
+    135deg,
+    rgb(232 191 118 / 10%),
+    rgb(241 164 56 / 10%)
+  );
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 5px;
   transition: all 0.3s ease;
 }
 
 .interactiveName:hover {
   color: #e8bf76;
   text-shadow: 0 1px 3px rgb(0 0 0 / 30%);
-  background: linear-gradient(135deg, rgb(232 191 118 / 30%), rgb(241 164 56 / 30%));
+  background: linear-gradient(
+    135deg,
+    rgb(232 191 118 / 30%),
+    rgb(241 164 56 / 30%)
+  );
   border-color: rgb(232 191 118 / 50%);
   box-shadow: 0 4px 12px rgb(232 191 118 / 30%);
   transform: translateY(-1px);
+}
+
+.interactiveName:active {
+  background: linear-gradient(
+    135deg,
+    rgb(232 191 118 / 40%),
+    rgb(241 164 56 / 40%)
+  );
+  transform: scale(0.95);
 }
 
 .interactiveName::before {
   position: absolute;
   inset: 0;
   z-index: -1;
-  content: '';
-  background: linear-gradient(135deg, rgb(232 191 118 / 10%), rgb(241 164 56 / 10%));
+  content: "";
+  background: linear-gradient(
+    135deg,
+    rgb(232 191 118 / 10%),
+    rgb(241 164 56 / 10%)
+  );
   border-radius: 4px;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -1086,7 +1772,8 @@
 }
 
 @keyframes nameGlow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 4px 12px rgb(232 191 118 / 30%);
   }
 

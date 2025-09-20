@@ -8,7 +8,12 @@ import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
 import styles from './WelcomeScreen.module.css';
 
-function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = false }) {
+function WelcomeScreen({
+  onContinue,
+  catName,
+  nameStats = [],
+  isTransitioning = false
+}) {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
@@ -21,30 +26,37 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   const animationFrameRef = useRef(null);
 
   // Particle system for enhanced visual appeal
-  const createParticle = useCallback(() => ({
-    id: Math.random(),
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    vx: (Math.random() - 0.5) * 0.5,
-    vy: (Math.random() - 0.5) * 0.5,
-    size: Math.random() * 3 + 1,
-    opacity: Math.random() * 0.5 + 0.2,
-    life: 1,
-    decay: Math.random() * 0.02 + 0.01
-  }), []);
+  const createParticle = useCallback(() => {
+    // Reduce particle count on mobile for better performance
+    const isMobile = window.innerWidth <= 768;
+
+    return {
+      id: Math.random(),
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.5),
+      vy: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.5),
+      size: Math.random() * (isMobile ? 2 : 3) + 1,
+      opacity: Math.random() * (isMobile ? 0.3 : 0.5) + 0.2,
+      life: 1,
+      decay: Math.random() * 0.02 + 0.01
+    };
+  }, []);
 
   const animateParticles = useCallback(() => {
-    setParticles(prevParticles =>
+    setParticles((prevParticles) =>
       prevParticles
-        .map(particle => ({
+        .map((particle) => ({
           ...particle,
           x: particle.x + particle.vx,
           y: particle.y + particle.vy,
           life: particle.life - particle.decay,
           opacity: particle.opacity * particle.life
         }))
-        .filter(particle => particle.life > 0)
-        .concat(Array.from({ length: Math.random() < 0.1 ? 1 : 0 }, createParticle))
+        .filter((particle) => particle.life > 0)
+        .concat(
+          Array.from({ length: Math.random() < 0.1 ? 1 : 0 }, createParticle)
+        )
     );
   }, [createParticle]);
 
@@ -53,8 +65,13 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     document.body.classList.add('welcome-page');
     document.documentElement.classList.add('welcome-page');
 
-    // Initialize particles
-    const initialParticles = Array.from({ length: 20 }, createParticle);
+    // Initialize particles with mobile optimization
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = isMobile ? 10 : 20;
+    const initialParticles = Array.from(
+      { length: particleCount },
+      createParticle
+    );
     setParticles(initialParticles);
 
     // Animate in after a brief delay
@@ -63,9 +80,13 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       setShowCelebration(true);
     }, 100);
 
-    // Start particle animation
+    // Start particle animation with mobile optimization
     const animate = () => {
-      animateParticles();
+      // Reduce animation frequency on mobile
+      const isMobile = window.innerWidth <= 768;
+      if (!isMobile || Math.random() < 0.7) {
+        animateParticles();
+      }
       animationFrameRef.current = requestAnimationFrame(animate);
     };
     animationFrameRef.current = requestAnimationFrame(animate);
@@ -87,9 +108,9 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     setIsAnimating(true);
     setShowProgress(true);
 
-    // Add haptic feedback if available
+    // Enhanced haptic feedback for mobile
     if (navigator.vibrate) {
-      navigator.vibrate([50, 100, 50]);
+      navigator.vibrate([100, 50, 100, 50, 100]);
     }
 
     // Play sound effect if available
@@ -107,6 +128,19 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     setTimeout(() => {
       onContinue();
     }, 800);
+  };
+
+  // Handle mobile-specific button interactions
+  const handleButtonTouchStart = (event) => {
+    event.target.style.transform = 'scale(0.98)';
+  };
+
+  const handleButtonTouchEnd = (event) => {
+    event.target.style.transform = 'scale(1)';
+  };
+
+  const handleButtonTouchCancel = (event) => {
+    event.target.style.transform = 'scale(1)';
   };
 
   // Handle mouse events for interactive names
@@ -128,11 +162,51 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     setHoveredName(null);
   };
 
+  // Handle touch events for mobile
+  const handleNameTouchStart = (nameData, event) => {
+    event.preventDefault();
+    setTooltipPosition({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2
+    });
+    setHoveredName(nameData);
+
+    // Add haptic feedback for touch
+    if (navigator.vibrate) {
+      navigator.vibrate([30, 50, 30]);
+    }
+
+    // Add visual feedback
+    event.target.style.transform = 'scale(0.95)';
+  };
+
+  const handleNameTouchEnd = (event) => {
+    event.preventDefault();
+    // Reset visual feedback
+    event.target.style.transform = 'scale(1)';
+
+    // Delay hiding to allow user to see the tooltip
+    setTimeout(() => {
+      setHoveredName(null);
+    }, 3000);
+  };
+
+  const handleNameTouchCancel = (event) => {
+    event.preventDefault();
+    // Reset visual feedback
+    event.target.style.transform = 'scale(1)';
+    setHoveredName(null);
+  };
+
   // Create individual name components from the cat name
   const createInteractiveNames = () => {
     if (!catName || catName === 'Loading...' || nameStats.length === 0) {
       return (
-        <span className={styles.catNameText} role="text" aria-label="Loading cat name">
+        <span
+          className={styles.catNameText}
+          role="text"
+          aria-label="Loading cat name"
+        >
           {catName || 'Loading...'}
         </span>
       );
@@ -141,7 +215,11 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     // Handle error state
     if (catName === 'Mystery Cat' || !nameStats || nameStats.length === 0) {
       return (
-        <span className={styles.catNameText} role="text" aria-label="Cat name: Mystery Cat">
+        <span
+          className={styles.catNameText}
+          role="text"
+          aria-label="Cat name: Mystery Cat"
+        >
           {catName}
         </span>
       );
@@ -170,8 +248,10 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     // Remove overlapping matches (keep the one with higher rating)
     const filteredMatches = [];
     for (const match of matchedNames) {
-      const hasOverlap = filteredMatches.some(existing =>
-        (match.startIndex < existing.endIndex && match.endIndex > existing.startIndex)
+      const hasOverlap = filteredMatches.some(
+        (existing) =>
+          match.startIndex < existing.endIndex &&
+          match.endIndex > existing.startIndex
       );
       if (!hasOverlap) {
         filteredMatches.push(match);
@@ -205,8 +285,11 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
           className={`${styles.catNameText} ${styles.interactiveName}`}
           onMouseEnter={(e) => handleNameMouseEnter(nameData, e)}
           onMouseLeave={handleNameMouseLeave}
-          title={`Hover to see stats for ${nameData.name}`}
-          aria-label={`Interactive name: ${nameData.name}. Rating: ${nameData.rating}, Win rate: ${nameData.winRate}%. Press Enter or Space to view detailed statistics.`}
+          onTouchStart={(e) => handleNameTouchStart(nameData, e)}
+          onTouchEnd={handleNameTouchEnd}
+          onTouchCancel={handleNameTouchCancel}
+          title={`Tap to see stats for ${nameData.name}`}
+          aria-label={`Interactive name: ${nameData.name}. Rating: ${nameData.rating}, Win rate: ${nameData.winRate}%. Tap to view detailed statistics.`}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
@@ -233,7 +316,11 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       );
     }
 
-    return nameComponents.length > 0 ? nameComponents : <span className={styles.catNameText}>{catName}</span>;
+    return nameComponents.length > 0 ? (
+      nameComponents
+    ) : (
+      <span className={styles.catNameText}>{catName}</span>
+    );
   };
 
   return (
@@ -249,7 +336,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
 
         {/* Particle effects */}
         <div className={styles.particleContainer}>
-          {particles.map(particle => (
+          {particles.map((particle) => (
             <div
               key={particle.id}
               className={styles.particle}
@@ -288,7 +375,9 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
           <div className={styles.progressBar} aria-hidden="true">
             <div className={styles.progressFill} />
           </div>
-          <p className={styles.progressText}>Preparing your tournament experience...</p>
+          <p className={styles.progressText}>
+            Preparing your tournament experience...
+          </p>
         </div>
       )}
 
@@ -313,33 +402,54 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
           </div>
 
           <div className={styles.catNameSection}>
-            <h2 className={`${styles.catNameTitle} ${showCelebration ? styles.catNameTitleCelebration : ''}`}>
+            <h2
+              className={`${styles.catNameTitle} ${showCelebration ? styles.catNameTitleCelebration : ''}`}
+            >
               <span className={styles.titleText}>My cat&apos;s name is:</span>
               <span className={styles.titleSparkle}>✨</span>
             </h2>
-            <div className={`${styles.catNameDisplay} ${showCelebration ? styles.catNameDisplayCelebration : ''}`}>
+            <div
+              className={`${styles.catNameDisplay} ${showCelebration ? styles.catNameDisplayCelebration : ''}`}
+            >
               {createInteractiveNames()}
             </div>
-            <p className={`${styles.catNameSubtext} ${showCelebration ? styles.catNameSubtextCelebration : ''}`}>
-              A name carefully crafted from all the tournament results, ranked from most to least voted!
+            <p
+              className={`${styles.catNameSubtext} ${showCelebration ? styles.catNameSubtextCelebration : ''}`}
+            >
+              A name carefully crafted from all the tournament results, ranked
+              from most to least voted!
             </p>
           </div>
         </div>
 
         {/* Action Section */}
-        <div className={`${styles.actionSection} ${showCelebration ? styles.actionSectionCelebration : ''}`}>
+        <div
+          className={`${styles.actionSection} ${showCelebration ? styles.actionSectionCelebration : ''}`}
+        >
           <button
             onClick={handleContinue}
+            onTouchStart={handleButtonTouchStart}
+            onTouchEnd={handleButtonTouchEnd}
+            onTouchCancel={handleButtonTouchCancel}
             className={`${styles.continueButton} ${showCelebration ? styles.continueButtonCelebration : ''}`}
             disabled={isAnimating}
-            aria-label={isAnimating ? 'Entering tournament, please wait' : 'Start the tournament'}
+            aria-label={
+              isAnimating
+                ? 'Entering tournament, please wait'
+                : 'Start the tournament'
+            }
             aria-describedby="button-description"
           >
             <span className={styles.buttonContent}>
               <span className={styles.buttonText}>
-                {isAnimating ? 'Entering Tournament...' : 'Start the Tournament!'}
+                {isAnimating
+                  ? 'Entering Tournament...'
+                  : 'Start the Tournament!'}
               </span>
-              <span className={`${styles.buttonEmoji} ${showCelebration ? styles.buttonEmojiCelebration : ''}`} aria-hidden="true">
+              <span
+                className={`${styles.buttonEmoji} ${showCelebration ? styles.buttonEmojiCelebration : ''}`}
+                aria-hidden="true"
+              >
                 🏆
               </span>
             </span>
@@ -348,7 +458,8 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
 
           <div className={styles.explanationText} id="button-description">
             <p>
-              This name represents the collective wisdom of all tournament participants!
+              This name represents the collective wisdom of all tournament
+              participants!
             </p>
           </div>
         </div>
@@ -369,18 +480,20 @@ WelcomeScreen.displayName = 'WelcomeScreen';
 WelcomeScreen.propTypes = {
   onContinue: PropTypes.func.isRequired,
   catName: PropTypes.string.isRequired,
-  nameStats: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    rating: PropTypes.number.isRequired,
-    wins: PropTypes.number.isRequired,
-    losses: PropTypes.number.isRequired,
-    totalMatches: PropTypes.number.isRequired,
-    winRate: PropTypes.number.isRequired,
-    rank: PropTypes.number.isRequired,
-    categories: PropTypes.arrayOf(PropTypes.string)
-  })),
+  nameStats: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      rating: PropTypes.number.isRequired,
+      wins: PropTypes.number.isRequired,
+      losses: PropTypes.number.isRequired,
+      totalMatches: PropTypes.number.isRequired,
+      winRate: PropTypes.number.isRequired,
+      rank: PropTypes.number.isRequired,
+      categories: PropTypes.arrayOf(PropTypes.string)
+    })
+  ),
   isTransitioning: PropTypes.bool
 };
 

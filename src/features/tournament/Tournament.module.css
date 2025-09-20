@@ -47,7 +47,7 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
   transition:
     transform var(--duration-normal) var(--ease-out),
     box-shadow var(--duration-normal) var(--ease-out);
@@ -108,7 +108,7 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
   transition: all var(--duration-normal) var(--ease-out);
   will-change: transform, box-shadow;
 }
@@ -202,11 +202,12 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
   transition: all var(--duration-normal) var(--ease-out);
 }
 
-.controlButton {  }
+.controlButton {
+}
 
 .soundControls {
   display: flex;
@@ -243,7 +244,10 @@
   border: none;
   border-radius: var(--radius-sm);
 }
-.undoButton:hover { background: var(--primary-500); }
+
+.undoButton:hover {
+  background: var(--primary-500);
+}
 
 .undoTimer {
   margin-left: 6px;
@@ -536,11 +540,9 @@
 }
 
 .modalTitle {
-  
 }
 
 .modalText {
-  
 }
 
 .modalActions {
@@ -549,11 +551,9 @@
 }
 
 .confirmButton {
-  
 }
 
 .cancelButton {
-  
 }
 
 /* Animations

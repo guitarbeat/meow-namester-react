@@ -104,7 +104,8 @@ function Results({
         if (leftOutcome || rightOutcome) {
           const leftWin = leftOutcome === 'win';
           const rightWin = rightOutcome === 'win';
-          if (leftWin && rightWin) winner = 0; // both
+          if (leftWin && rightWin)
+            winner = 0; // both
           else if (leftWin && !rightWin) winner = -1;
           else if (!leftWin && rightWin) winner = 1;
           else winner = 2; // neither/skip
@@ -123,7 +124,10 @@ function Results({
         }
 
         const matchNumber = vote?.matchNumber ?? index + 1;
-        const round = Math.max(1, Math.ceil(matchNumber / Math.max(1, matchesPerRound)));
+        const round = Math.max(
+          1,
+          Math.ceil(matchNumber / Math.max(1, matchesPerRound))
+        );
 
         return {
           id: matchNumber,

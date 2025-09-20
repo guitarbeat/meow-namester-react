@@ -96,7 +96,7 @@
   border-color: var(--primary-200);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-          backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 .roundTitle {
@@ -195,7 +195,11 @@
   composes: player;
   font-weight: 500;
   color: var(--primary-700);
-  background: linear-gradient(180deg, rgb(var(--primary-rgb) / 10%), rgb(var(--primary-rgb) / 6%));
+  background: linear-gradient(
+    180deg,
+    rgb(var(--primary-rgb) / 10%),
+    rgb(var(--primary-rgb) / 6%)
+  );
   border-color: var(--primary-300);
 }
 
@@ -211,7 +215,11 @@
   composes: player;
   font-weight: 500;
   color: var(--success-700);
-  background: linear-gradient(180deg, rgb(var(--success-rgb) / 12%), rgb(var(--success-rgb) / 6%));
+  background: linear-gradient(
+    180deg,
+    rgb(var(--success-rgb) / 12%),
+    rgb(var(--success-rgb) / 6%)
+  );
   border-color: var(--success-300);
 }
 

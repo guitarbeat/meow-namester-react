@@ -135,9 +135,15 @@ const TournamentControls = ({
             aria-label={isShuffle ? 'Disable shuffle' : 'Enable shuffle'}
             aria-pressed={isShuffle}
             disabled={isTransitioning}
-            title={isShuffle ? 'Shuffle: On (click to turn off)' : 'Shuffle: Off (click to turn on)'}
+            title={
+              isShuffle
+                ? 'Shuffle: On (click to turn off)'
+                : 'Shuffle: Off (click to turn on)'
+            }
           >
-            <span className={styles.icon} aria-hidden="true">🔀</span>
+            <span className={styles.icon} aria-hidden="true">
+              🔀
+            </span>
           </button>
         )}
 

@@ -48,11 +48,18 @@ const ProfileNameList = ({
 
     // * Apply user filter
     // Only apply user filter if user_name exists on items
-    if (names.length && Object.prototype.hasOwnProperty.call(names[0], 'user_name')) {
+    if (
+      names.length &&
+      Object.prototype.hasOwnProperty.call(names[0], 'user_name')
+    ) {
       if (userFilter === FILTER_OPTIONS.USER.CURRENT) {
-        filtered = filtered.filter((name) => name.user_name === ratings.userName);
+        filtered = filtered.filter(
+          (name) => name.user_name === ratings.userName
+        );
       } else if (userFilter === FILTER_OPTIONS.USER.OTHER) {
-        filtered = filtered.filter((name) => name.user_name !== ratings.userName);
+        filtered = filtered.filter(
+          (name) => name.user_name !== ratings.userName
+        );
       }
     }
 
@@ -227,15 +234,15 @@ const ProfileNameList = ({
 
   // * Handle select all functionality
   const handleSelectAll = () => {
-    const allVisibleIds = filteredAndSortedNames.map(name => name.id);
-    const allSelected = allVisibleIds.every(id => selectedNames.has(id));
+    const allVisibleIds = filteredAndSortedNames.map((name) => name.id);
+    const allSelected = allVisibleIds.every((id) => selectedNames.has(id));
 
     if (allSelected) {
       // Deselect all visible names
-      allVisibleIds.forEach(id => onSelectionChange?.(id, false));
+      allVisibleIds.forEach((id) => onSelectionChange?.(id, false));
     } else {
       // Select all visible names
-      allVisibleIds.forEach(id => onSelectionChange?.(id, true));
+      allVisibleIds.forEach((id) => onSelectionChange?.(id, true));
     }
   };
 
@@ -251,8 +258,9 @@ const ProfileNameList = ({
   };
 
   // * Check if all visible names are selected
-  const allVisibleSelected = filteredAndSortedNames.length > 0 &&
-    filteredAndSortedNames.every(name => selectedNames.has(name.id));
+  const allVisibleSelected =
+    filteredAndSortedNames.length > 0 &&
+    filteredAndSortedNames.every((name) => selectedNames.has(name.id));
 
   return (
     <div className={`${styles.container} ${className}`}>

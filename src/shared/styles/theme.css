@@ -337,8 +337,14 @@ body.light-theme {
   --text-secondary-dark: #e2e8f0; /* * Light secondary text */
   --button-primary-bg: var(--primary-600);
   --button-primary-hover: var(--primary-700);
-  --button-secondary-bg: rgb(255 255 255 / 12%); /* * More visible secondary button */
-  --button-secondary-hover: rgb(255 255 255 / 20%); /* * More visible hover state */
+  --button-secondary-bg: rgb(
+    255 255 255 / 12%
+  ); /* * More visible secondary button */
+
+  --button-secondary-hover: rgb(
+    255 255 255 / 20%
+  ); /* * More visible hover state */
+
   --button-text-light: white;
 
   /* * Start section colors for light theme */
@@ -350,7 +356,11 @@ body.light-theme {
   --accent-medium: rgb(255 255 255 / 20%); /* * Medium accent for dark theme */
 
   /* NameCard selected state variables */
-  --namecard-selected-bg: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  --namecard-selected-bg: linear-gradient(
+    135deg,
+    var(--primary-600),
+    var(--primary-700)
+  );
   --namecard-selected-border: var(--primary-400);
   --namecard-selected-description: var(--primary-300);
 }
@@ -396,7 +406,11 @@ body.dark-theme {
   --accent-medium: rgb(255 255 255 / 15%); /* * Medium accent for dark theme */
 
   /* NameCard selected state variables */
-  --namecard-selected-bg: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+  --namecard-selected-bg: linear-gradient(
+    135deg,
+    var(--primary-700),
+    var(--primary-800)
+  );
   --namecard-selected-border: var(--primary-400);
   --namecard-selected-description: var(--primary-300);
 }

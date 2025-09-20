@@ -20,7 +20,7 @@
   background: var(--glass-bg);
   border-bottom: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .profileTitle {
@@ -39,7 +39,6 @@
 }
 
 .button {
-  
 }
 
 /* Main Content - Sidebar Layout */
@@ -59,7 +58,7 @@
   background: var(--glass-bg);
   border-right: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .sidebarHeader {
@@ -264,11 +263,7 @@
 /* Hidden Name Styling */
 .hiddenName {
   position: relative;
-  background: linear-gradient(
-    135deg,
-    var(--warning-50),
-    var(--warning-100)
-  );
+  background: linear-gradient(135deg, var(--warning-50), var(--warning-100));
   border: 2px solid var(--warning-300);
   opacity: 0.7;
 }

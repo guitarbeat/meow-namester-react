@@ -189,10 +189,10 @@ export function useTournament({
   // * Validate names array
   // * Treat empty arrays as a loading state (not an error) to avoid noisy logs during initialization
   useEffect(() => {
-    const invalid = !Array.isArray(names) || (names.length > 0 && names.length < 2);
+    const invalid =
+      !Array.isArray(names) || (names.length > 0 && names.length < 2);
     if (invalid !== isError) {
       if (invalid && process.env.NODE_ENV === 'development') {
-
         console.warn('[DEV] 🎮 useTournament: Invalid names array detected');
       }
       updateTournamentState({ isError: invalid });
@@ -411,24 +411,24 @@ export function useTournament({
         });
       }
     },
-      [
-        isTransitioning,
-        isError,
-        currentMatch,
-        currentMatchNumber,
-        totalMatches,
-        names,
-        roundNumber,
-        currentRatings,
-        sorter,
-        onComplete,
-        getCurrentRatings,
-        updateTournamentState,
-        updatePersistentState,
-        userName,
-        elo,
-        persistentState.matchHistory
-      ]
+    [
+      isTransitioning,
+      isError,
+      currentMatch,
+      currentMatchNumber,
+      totalMatches,
+      names,
+      roundNumber,
+      currentRatings,
+      sorter,
+      onComplete,
+      getCurrentRatings,
+      updateTournamentState,
+      updatePersistentState,
+      userName,
+      elo,
+      persistentState.matchHistory
+    ]
   );
 
   // * Undo functionality
@@ -633,8 +633,12 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
         const key = `${a}-${b}`;
         const reverseKey = `${b}-${a}`;
         if (prefs.has(key) || prefs.has(reverseKey)) continue;
-        const ra = (ratings[a]?.rating ?? (typeof ratings[a] === 'number' ? ratings[a] : 1500));
-        const rb = (ratings[b]?.rating ?? (typeof ratings[b] === 'number' ? ratings[b] : 1500));
+        const ra =
+          ratings[a]?.rating ??
+          (typeof ratings[a] === 'number' ? ratings[a] : 1500);
+        const rb =
+          ratings[b]?.rating ??
+          (typeof ratings[b] === 'number' ? ratings[b] : 1500);
         const diff = Math.abs(ra - rb);
         const ca = comparisons.get(a) || 0;
         const cb = comparisons.get(b) || 0;
@@ -648,7 +652,10 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
 
       if (bestPair) {
         const [a, b] = bestPair;
-        sorter._pairIndex = Math.max(0, sorter._pairs.findIndex((p) => p[0] === a && p[1] === b));
+        sorter._pairIndex = Math.max(
+          0,
+          sorter._pairs.findIndex((p) => p[0] === a && p[1] === b)
+        );
         return {
           left: names.find((n) => n.name === a) || { name: a },
           right: names.find((n) => n.name === b) || { name: b }
@@ -666,7 +673,8 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
       if (nextMatch) {
         return {
           left: names.find((n) => n.name === nextMatch.left) || nextMatch.left,
-          right: names.find((n) => n.name === nextMatch.right) || nextMatch.right
+          right:
+            names.find((n) => n.name === nextMatch.right) || nextMatch.right
         };
       }
     } catch (error) {
@@ -697,8 +705,12 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
       const reverseKey = `${b}-${a}`;
       if (prefs.has(key) || prefs.has(reverseKey)) continue; // already judged
 
-      const ra = (ratings[a]?.rating ?? (typeof ratings[a] === 'number' ? ratings[a] : 1500));
-      const rb = (ratings[b]?.rating ?? (typeof ratings[b] === 'number' ? ratings[b] : 1500));
+      const ra =
+        ratings[a]?.rating ??
+        (typeof ratings[a] === 'number' ? ratings[a] : 1500);
+      const rb =
+        ratings[b]?.rating ??
+        (typeof ratings[b] === 'number' ? ratings[b] : 1500);
       const diff = Math.abs(ra - rb);
 
       const ca = comparisons.get(a) || 0;
@@ -718,7 +730,10 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
     if (bestPair) {
       const [a, b] = bestPair;
       // Move currentIndex close to the chosen pair to keep iteration stable
-      sorter._pairIndex = Math.max(0, sorter._pairs.findIndex((p) => p[0] === a && p[1] === b));
+      sorter._pairIndex = Math.max(
+        0,
+        sorter._pairs.findIndex((p) => p[0] === a && p[1] === b)
+      );
       return {
         left: names.find((n) => n.name === a) || { name: a },
         right: names.find((n) => n.name === b) || { name: b }

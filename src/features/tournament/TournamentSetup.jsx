@@ -5,14 +5,14 @@
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-  import {
-    supabase,
-    getNamesWithDescriptions,
-    tournamentsAPI,
-    catNamesAPI,
-    imagesAPI
-  } from '../../../backend/api/supabaseClient';
-  import { compressImageFile } from '../../shared/utils/imageUtils';
+import {
+  supabase,
+  getNamesWithDescriptions,
+  tournamentsAPI,
+  catNamesAPI,
+  imagesAPI
+} from '../../../backend/api/supabaseClient';
+import { compressImageFile } from '../../shared/utils/imageUtils';
 import devLog from '../../shared/utils/logger';
 import {
   LoadingSpinner,
@@ -23,7 +23,10 @@ import {
 } from '../../shared/components';
 import useErrorHandler from '../../core/hooks/useErrorHandler';
 import useToast from '../../core/hooks/useToast';
-import { validateCatName, validateDescription } from '../../shared/utils/validation';
+import {
+  validateCatName,
+  validateDescription
+} from '../../shared/utils/validation';
 import styles from './TournamentSetup.module.css';
 
 // Use absolute paths for better image loading compatibility
@@ -47,10 +50,26 @@ const CAT_IMAGES = [
 const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
 
 const FALLBACK_NAMES = [
-  { id: 'aaron', name: 'aaron', description: 'temporary fallback — backend offline' },
-  { id: 'fix', name: 'fix', description: 'temporary fallback — backend offline' },
-  { id: 'the', name: 'the', description: 'temporary fallback — backend offline' },
-  { id: 'site', name: 'site', description: 'temporary fallback — backend offline' }
+  {
+    id: 'aaron',
+    name: 'aaron',
+    description: 'temporary fallback — backend offline'
+  },
+  {
+    id: 'fix',
+    name: 'fix',
+    description: 'temporary fallback — backend offline'
+  },
+  {
+    id: 'the',
+    name: 'the',
+    description: 'temporary fallback — backend offline'
+  },
+  {
+    id: 'site',
+    name: 'site',
+    description: 'temporary fallback — backend offline'
+  }
 ];
 
 // Helper function to get random cat images
@@ -67,7 +86,8 @@ const getRandomCatImage = (nameId, imageList = CAT_IMAGES) => {
   }
 
   // Use the numeric ID to consistently get the same image for the same name
-  const list = Array.isArray(imageList) && imageList.length ? imageList : CAT_IMAGES;
+  const list =
+    Array.isArray(imageList) && imageList.length ? imageList : CAT_IMAGES;
   const index = Math.abs(numericId) % list.length;
   return list[index];
 };
@@ -232,7 +252,11 @@ const NameSelection = ({
               onClick={() => onToggleName(nameObj)}
               size="small"
               // Cat picture when enabled
-              image={showCatPictures ? getRandomCatImage(nameObj.id, imageList) : undefined}
+              image={
+                showCatPictures
+                  ? getRandomCatImage(nameObj.id, imageList)
+                  : undefined
+              }
               // Admin-only metadata display
               metadata={
                 isAdmin
@@ -279,9 +303,10 @@ const SwipeableNameCards = ({
 
   const currentName = names[currentIndex];
   const isSelected = selectedNames.some((n) => n.id === currentName?.id);
-  const imageSrc = showCatPictures && currentName
-    ? getRandomCatImage(currentName.id, imageList)
-    : null;
+  const imageSrc =
+    showCatPictures && currentName
+      ? getRandomCatImage(currentName.id, imageList)
+      : null;
 
   const handleDragStart = (e) => {
     const touch = e.touches ? e.touches[0] : e;
@@ -406,7 +431,8 @@ const SwipeableNameCards = ({
       let bestY = start;
       let bestVal = -Infinity;
       for (let y = start; y < end; y++) {
-        const e = (rowEnergy[y - 1] || 0) + rowEnergy[y] + (rowEnergy[y + 1] || 0);
+        const e =
+          (rowEnergy[y - 1] || 0) + rowEnergy[y] + (rowEnergy[y + 1] || 0);
         if (e > bestVal) {
           bestVal = e;
           bestY = y;
@@ -487,7 +513,9 @@ const SwipeableNameCards = ({
                 {(() => {
                   const src = imageSrc;
                   if (String(src).startsWith('/assets/images/')) {
-                    const base = src.includes('.') ? src.replace(/\.[^.]+$/, '') : src;
+                    const base = src.includes('.')
+                      ? src.replace(/\.[^.]+$/, '')
+                      : src;
                     return (
                       <picture>
                         <source type="image/avif" srcSet={`${base}.avif`} />
@@ -501,7 +529,10 @@ const SwipeableNameCards = ({
                           decoding="async"
                           onLoad={handleImageLoad}
                           onError={(e) => {
-                            console.error('Image failed to load:', e.target.src);
+                            console.error(
+                              'Image failed to load:',
+                              e.target.src
+                            );
                           }}
                         />
                       </picture>
@@ -687,7 +718,9 @@ const NameSuggestionSection = () => {
         throw new Error(res.error || 'Failed to add name');
       }
       setSuccess('Thank you for your suggestion!');
-      showSuccess('Name suggestion submitted successfully!', { duration: 4000 });
+      showSuccess('Name suggestion submitted successfully!', {
+        duration: 4000
+      });
       setName('');
       setDescription('');
     } catch {
@@ -867,29 +900,32 @@ function useTournamentSetup(userName) {
     };
 
     fetchNames();
-    }, [handleError, userName]);
+  }, [handleError, userName]);
 
   // Save tournament selections to database
-  const saveTournamentSelections = useCallback(async (selectedNames) => {
-    try {
-      // Create a unique tournament ID for this selection session
-      const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const saveTournamentSelections = useCallback(
+    async (selectedNames) => {
+      try {
+        // Create a unique tournament ID for this selection session
+        const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-      // Save selections to database
-      if (!supabase) return;
+        // Save selections to database
+        if (!supabase) return;
 
-      const result = await tournamentsAPI.saveTournamentSelections(
-        userName,
-        selectedNames,
-        tournamentId
-      );
+        const result = await tournamentsAPI.saveTournamentSelections(
+          userName,
+          selectedNames,
+          tournamentId
+        );
 
-      devLog('🎮 TournamentSetup: Selections saved to database', result);
-    } catch (error) {
-      console.error('Error saving tournament selections:', error);
-      // Don't block the UI if saving fails
-    }
-  }, [userName]);
+        devLog('🎮 TournamentSetup: Selections saved to database', result);
+      } catch (error) {
+        console.error('Error saving tournament selections:', error);
+        // Don't block the UI if saving fails
+      }
+    },
+    [userName]
+  );
 
   const scheduleSave = useCallback(
     (namesToSave) => {
@@ -1000,7 +1036,9 @@ function TournamentSetupContent({ onStart, userName }) {
 
     const tryStaticManifest = async () => {
       try {
-        const res = await fetch('/assets/images/gallery.json', { cache: 'no-cache' });
+        const res = await fetch('/assets/images/gallery.json', {
+          cache: 'no-cache'
+        });
         if (!res.ok) return [];
         const data = await res.json();
         if (Array.isArray(data) && data.length) return data;
@@ -1064,7 +1102,6 @@ function TournamentSetupContent({ onStart, userName }) {
     setLightboxOpen(true);
   };
 
-
   const handleMouseMove = (e) => {
     setOpenImages((prev) =>
       prev.map((img) => {
@@ -1090,7 +1127,6 @@ function TournamentSetupContent({ onStart, userName }) {
       }))
     );
   };
-
 
   const handleResizeMove = (e) => {
     setOpenImages((prev) =>
@@ -1370,9 +1406,11 @@ function TournamentSetupContent({ onStart, userName }) {
               <p className={styles.starsDescription}>
                 Click any photo to get a closer look
               </p>
-            <div className={styles.photoGrid}>
-              {(showAllPhotos ? galleryImages : galleryImages.slice(0, 8)).map(
-                (image, index) => (
+              <div className={styles.photoGrid}>
+                {(showAllPhotos
+                  ? galleryImages
+                  : galleryImages.slice(0, 8)
+                ).map((image, index) => (
                   <button
                     key={image}
                     type="button"
@@ -1412,69 +1450,71 @@ function TournamentSetupContent({ onStart, userName }) {
                       <span className={styles.photoIcon}>👁️</span>
                     </div>
                   </button>
-                )
-              )}
-            </div>
+                ))}
+              </div>
 
-            <div className={styles.photoToolbar}>
-              {galleryImages.length > 8 && (
-                <div className={styles.photoActionsRow}>
-                  <button
-                    type="button"
-                    className={styles.photoMoreButton}
-                    onClick={() => setShowAllPhotos((v) => !v)}
-                  >
-                    {showAllPhotos
-                      ? 'Show fewer photos'
-                      : `Show ${galleryImages.length - 8} more photos`}
-                  </button>
-                </div>
-              )}
-              {isAdmin && (
-                <div className={styles.photoUploadRow}>
-                  <input
-                    id="gallery-upload"
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    capture="environment"
-                    style={{ display: 'none' }}
-                    onChange={async (e) => {
-                      const files = Array.from(e.target.files || []);
-                      if (!files.length) return;
-                    try {
-                      const uploaded = [];
-                      for (const f of files) {
-                        const compressed = await compressImageFile(f, {
-                          maxWidth: 1600,
-                          maxHeight: 1600,
-                          quality: 0.82
-                        });
-                        const url = await imagesAPI.upload(
-                          compressed,
-                          userName || 'aaron'
-                        );
-                        if (url) uploaded.push(url);
-                      }
-                      if (uploaded.length) {
-                        setGalleryImages((prev) => [...uploaded, ...prev]);
-                      }
-                    } catch (err) {
-                        console.error('Upload failed', err);
+              <div className={styles.photoToolbar}>
+                {galleryImages.length > 8 && (
+                  <div className={styles.photoActionsRow}>
+                    <button
+                      type="button"
+                      className={styles.photoMoreButton}
+                      onClick={() => setShowAllPhotos((v) => !v)}
+                    >
+                      {showAllPhotos
+                        ? 'Show fewer photos'
+                        : `Show ${galleryImages.length - 8} more photos`}
+                    </button>
+                  </div>
+                )}
+                {isAdmin && (
+                  <div className={styles.photoUploadRow}>
+                    <input
+                      id="gallery-upload"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      capture="environment"
+                      style={{ display: 'none' }}
+                      onChange={async (e) => {
+                        const files = Array.from(e.target.files || []);
+                        if (!files.length) return;
+                        try {
+                          const uploaded = [];
+                          for (const f of files) {
+                            const compressed = await compressImageFile(f, {
+                              maxWidth: 1600,
+                              maxHeight: 1600,
+                              quality: 0.82
+                            });
+                            const url = await imagesAPI.upload(
+                              compressed,
+                              userName || 'aaron'
+                            );
+                            if (url) uploaded.push(url);
+                          }
+                          if (uploaded.length) {
+                            setGalleryImages((prev) => [...uploaded, ...prev]);
+                          }
+                        } catch (err) {
+                          console.error('Upload failed', err);
 
-                        alert('Upload failed. Please try again.');
-                      } finally {
-                        e.target.value = '';
-                      }
-                    }}
-                  />
-                  <label htmlFor="gallery-upload" className={styles.photoUploadButton}>
-                    Upload Photos
-                  </label>
-                </div>
-              )}
+                          alert('Upload failed. Please try again.');
+                        } finally {
+                          e.target.value = '';
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor="gallery-upload"
+                      className={styles.photoUploadButton}
+                    >
+                      Upload Photos
+                    </label>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
           </div>
 
           <div className={styles.sidebarCard}>
@@ -1489,13 +1529,11 @@ function TournamentSetupContent({ onStart, userName }) {
           index={lightboxIndex}
           onClose={() => setLightboxOpen(false)}
           onPrev={() =>
-            setLightboxIndex((i) =>
-              (i - 1 + galleryImages.length) % galleryImages.length
+            setLightboxIndex(
+              (i) => (i - 1 + galleryImages.length) % galleryImages.length
             )
           }
-          onNext={() =>
-            setLightboxIndex((i) => (i + 1) % galleryImages.length)
-          }
+          onNext={() => setLightboxIndex((i) => (i + 1) % galleryImages.length)}
         />
       )}
     </div>
@@ -1540,8 +1578,17 @@ function Lightbox({ images, index, onClose, onPrev, onNext }) {
   const base = current.replace(/\.[^.]+$/, '');
 
   return (
-    <div className={styles.overlayBackdrop} onClick={onClose} role="dialog" aria-modal="true" aria-label="Image gallery">
-      <div className={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
+    <div
+      className={styles.overlayBackdrop}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image gallery"
+    >
+      <div
+        className={styles.lightboxContent}
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           className={styles.lightboxClose}

@@ -30,9 +30,7 @@ const Profile = React.lazy(() => import('./features/profile/Profile'));
 const TournamentSetup = React.lazy(
   () => import('./features/tournament/TournamentSetup')
 );
-const Tournament = React.lazy(
-  () => import('./features/tournament/Tournament')
-);
+const Tournament = React.lazy(() => import('./features/tournament/Tournament'));
 
 /**
  * Generate a cat background video element
@@ -128,8 +126,10 @@ function App() {
             const speed = 0.035 + idx * 0.012; // vary per cat
             const cTranslateY = Math.min(80, y * speed);
             const swayX = Math.sin((y + idx * 120) * 0.002) * 10;
-            const mouseParX = (mouseX - window.innerWidth / 2) * (0.0005 + idx * 0.0001);
-            const mouseParY = (mouseY - window.innerHeight / 2) * (0.0004 + idx * 0.00008);
+            const mouseParX =
+              (mouseX - window.innerWidth / 2) * (0.0005 + idx * 0.0001);
+            const mouseParY =
+              (mouseY - window.innerHeight / 2) * (0.0004 + idx * 0.00008);
             el.style.transform = `translate(${swayX + mouseParX * 35}px, ${cTranslateY + mouseParY * 25}px)`;
           });
         }
@@ -373,7 +373,14 @@ function App() {
 
   // * Show welcome screen first
   if (showWelcomeScreen) {
-    return <WelcomeScreen onContinue={handleWelcomeComplete} catName={catName} nameStats={nameStats} isTransitioning={isTransitioning} />;
+    return (
+      <WelcomeScreen
+        onContinue={handleWelcomeComplete}
+        catName={catName}
+        nameStats={nameStats}
+        isTransitioning={isTransitioning}
+      />
+    );
   }
 
   return (

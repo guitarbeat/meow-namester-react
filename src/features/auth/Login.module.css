@@ -611,18 +611,18 @@
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
   }
-  
+
   .stepIndicator {
     gap: 0.5rem;
     padding: 0.4rem 0.8rem;
   }
-  
+
   .stepNumber {
     width: 24px;
     height: 24px;
     font-size: 0.75rem;
   }
-  
+
   .stepText {
     font-size: 0.8rem;
   }

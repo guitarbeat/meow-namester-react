@@ -105,7 +105,7 @@
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   box-shadow: var(--glass-shadow);
-          backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -185,11 +185,13 @@
   border: 1px solid #f59e0b;
   border-radius: 9999px;
   box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
 }
 
 .hiddenBadge::before {
-  content: '🔒';
+  content: "🔒";
 }
 
 .hiddenBadge:hover {

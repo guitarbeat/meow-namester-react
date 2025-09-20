@@ -100,7 +100,7 @@ function NameCard({
 
       // Compute simple vertical gradient magnitude per row
       const rowEnergy = new Array(h).fill(0);
-      const toGray = (r, g, b) => (r * 0.299 + g * 0.587 + b * 0.114);
+      const toGray = (r, g, b) => r * 0.299 + g * 0.587 + b * 0.114;
       const idx = (x, y) => (y * w + x) * 4;
       for (let y = 1; y < h - 1; y++) {
         let sum = 0;
@@ -121,7 +121,8 @@ function NameCard({
       let bestVal = -Infinity;
       for (let y = start; y < end; y++) {
         // Smooth with small window
-        const e = (rowEnergy[y - 1] || 0) + rowEnergy[y] + (rowEnergy[y + 1] || 0);
+        const e =
+          (rowEnergy[y - 1] || 0) + rowEnergy[y] + (rowEnergy[y + 1] || 0);
         if (e > bestVal) {
           bestVal = e;
           bestY = y;
