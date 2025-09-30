@@ -19,7 +19,8 @@ import {
   NameCard,
   ErrorBoundary,
   ErrorDisplay,
-  InlineError
+  InlineError,
+  GroupVersionToggle
 } from '../../shared/components';
 import useErrorHandler from '../../core/hooks/useErrorHandler';
 import useToast from '../../core/hooks/useToast';
@@ -1019,6 +1020,7 @@ function TournamentSetupContent({ onStart, userName }) {
   const [galleryImages, setGalleryImages] = useState(CAT_IMAGES);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [groupVersion, setGroupVersion] = useState('boy'); // 'boy' or 'girl'
 
   // Load gallery dynamically from Supabase Storage (cat-images bucket)
   // Merge with static gallery.json and built-in defaults (de-dup by basename)
@@ -1259,6 +1261,13 @@ function TournamentSetupContent({ onStart, userName }) {
                 </p>
               </div>
               <div className={styles.headerActions}>
+                <GroupVersionToggle
+                  selectedVersion={groupVersion}
+                  onVersionChange={setGroupVersion}
+                  size="medium"
+                  className={styles.groupVersionToggle}
+                />
+
                 <button
                   onClick={handleSelectAll}
                   className={styles.selectAllButton}

@@ -1238,6 +1238,14 @@
     width: 100%;
   }
 
+  /* Group Version Toggle Mobile Styling */
+  .groupVersionToggle {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    order: -1; /* * Place at the top on mobile */
+  }
+
   .photoGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1395,6 +1403,13 @@
 .catPicturesToggleButton.active {
   background: var(--primary-color, #5a5cff);
   box-shadow: var(--shadow-lg);
+}
+
+/* Group Version Toggle */
+.groupVersionToggle {
+  width: 100%;
+  max-width: 200px;
+  min-width: 160px;
 }
 
 /* Swipe Mode Container */
@@ -1861,6 +1876,13 @@
     text-overflow: ellipsis; /* * Show ellipsis for very long text */
     font-size: var(--text-xs); /* * Reduce font size for better fit */
     white-space: nowrap; /* * Prevent text wrapping */
+  }
+
+  /* Group Version Toggle Extra Small Mobile */
+  .groupVersionToggle {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
   }
 }
 

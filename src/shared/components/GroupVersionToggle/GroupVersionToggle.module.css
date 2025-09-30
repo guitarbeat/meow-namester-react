@@ -1,0 +1,291 @@
+/* Group Version Toggle Component Styles
+ * Mobile-optimized with proper touch targets and responsive design
+ */
+
+.groupVersionToggle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  width: 100%;
+}
+
+.toggleContainer {
+  display: flex;
+  gap: var(--space-1, 0.25rem);
+  padding: var(--space-1, 0.25rem);
+  background: var(--surface-color, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: var(--radius-lg, 0.75rem);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
+  transition: all var(--transition-all, 0.3s ease);
+}
+
+.toggleContainer:hover {
+  border-color: var(--primary-300, #a5b4fc);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1));
+}
+
+.toggleButton {
+  display: flex;
+  flex: 1;
+  gap: var(--space-2, 0.5rem);
+  align-items: center;
+  justify-content: center;
+  min-width: 0; /* Allow flex shrinking */
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 500;
+  color: var(--text-secondary, #64748b);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md, 0.5rem);
+  transition: all var(--transition-all, 0.3s ease);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toggleButton:hover:not(.disabled) {
+  color: var(--text-primary, #1e293b);
+  background: var(--card-hover, #f1f5f9);
+  transform: translateY(-1px);
+}
+
+.toggleButton:active:not(.disabled) {
+  transform: translateY(0);
+}
+
+.toggleButton.active {
+  color: white;
+  background: var(--primary-color, #5a5cff);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1));
+  transform: translateY(-1px);
+}
+
+.toggleButton.active:hover {
+  background: var(--primary-dark, #4338ca);
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1));
+}
+
+.toggleButton.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
+.buttonIcon {
+  font-size: var(--text-lg, 1.125rem);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.buttonText {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Size variants */
+.small .toggleButton {
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  font-size: var(--text-xs, 0.75rem);
+}
+
+.small .buttonIcon {
+  font-size: var(--text-base, 1rem);
+}
+
+.medium .toggleButton {
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  font-size: var(--text-sm, 0.875rem);
+}
+
+.medium .buttonIcon {
+  font-size: var(--text-lg, 1.125rem);
+}
+
+.large .toggleButton {
+  padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
+  font-size: var(--text-base, 1rem);
+}
+
+.large .buttonIcon {
+  font-size: var(--text-xl, 1.25rem);
+}
+
+/* Mobile optimizations */
+@media (width <= 768px) {
+  .groupVersionToggle {
+    width: 100%;
+  }
+
+  .toggleContainer {
+    gap: var(--space-1, 0.25rem);
+    padding: var(--space-1, 0.25rem);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .toggleButton {
+    min-width: 48px; /* Ensure minimum touch target size */
+    min-height: 48px; /* Ensure minimum touch target size */
+    padding: var(--space-3, 0.75rem) var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.875rem);
+    gap: var(--space-1, 0.25rem);
+    flex: 1; /* Ensure equal distribution */
+  }
+
+  .buttonIcon {
+    font-size: var(--text-base, 1rem);
+    flex-shrink: 0;
+  }
+
+  .buttonText {
+    font-size: var(--text-xs, 0.75rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Ensure proper spacing on mobile */
+  .toggleContainer {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Small mobile devices (iPhone SE, etc.) */
+@media (width <= 430px) {
+  .toggleButton {
+    min-width: 44px; /* Slightly smaller for very small screens */
+    min-height: 44px;
+    padding: var(--space-2, 0.5rem) var(--space-1, 0.25rem);
+    font-size: var(--text-xs, 0.75rem);
+    gap: var(--space-1, 0.25rem);
+  }
+
+  .buttonIcon {
+    font-size: var(--text-sm, 0.875rem);
+  }
+
+  .buttonText {
+    font-size: var(--text-xs, 0.75rem);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .toggleButton {
+    min-width: 48px;
+    min-height: 48px;
+    touch-action: manipulation; /* Optimize touch behavior */
+  }
+
+  .toggleButton:active:not(.disabled) {
+    transform: scale(0.95);
+    background: var(--card-hover, #f1f5f9);
+  }
+
+  .toggleButton.active:active {
+    transform: scale(0.95);
+    background: var(--primary-dark, #4338ca);
+  }
+
+  /* Enhanced touch feedback */
+  .toggleButton:not(.disabled) {
+    transition: all 0.2s ease;
+  }
+
+  /* Ensure proper touch targets on mobile */
+  .toggleContainer {
+    touch-action: manipulation;
+  }
+
+  /* Prevent text selection on touch */
+  .toggleButton {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: more) {
+  .toggleContainer {
+    border-width: 2px;
+    border-color: var(--text-primary, #1e293b);
+  }
+
+  .toggleButton {
+    border: 1px solid transparent;
+  }
+
+  .toggleButton:focus-visible {
+    outline: 2px solid var(--primary-color, #5a5cff);
+    outline-offset: 2px;
+  }
+
+  .toggleButton.active {
+    border-color: var(--primary-color, #5a5cff);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .toggleButton,
+  .toggleContainer {
+    transition: none;
+  }
+
+  .toggleButton:hover:not(.disabled),
+  .toggleButton:active:not(.disabled),
+  .toggleButton.active {
+    transform: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.toggleButton:focus-visible {
+  outline: 2px solid var(--primary-color, #5a5cff);
+  outline-offset: 2px;
+}
+
+/* Ensure proper contrast in dark mode */
+@media (prefers-color-scheme: dark) {
+  .toggleContainer {
+    background: var(--surface-color-dark, #1e293b);
+    border-color: var(--border-color-dark, #334155);
+  }
+
+  .toggleButton {
+    color: var(--text-secondary-dark, #94a3b8);
+  }
+
+  .toggleButton:hover:not(.disabled) {
+    color: var(--text-primary-dark, #f8fafc);
+    background: var(--card-hover-dark, #334155);
+  }
+}
+
+/* Landscape mobile optimizations */
+@media screen and (width <= 768px) and (orientation: landscape) {
+  .toggleButton {
+    min-height: 44px; /* Slightly smaller for landscape */
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  }
+}
+
+/* Safe area insets for modern mobile devices */
+@supports (padding: max(0px)) {
+  @media (width <= 768px) {
+    .groupVersionToggle {
+      padding-left: max(var(--space-2, 0.5rem), env(safe-area-inset-left));
+      padding-right: max(var(--space-2, 0.5rem), env(safe-area-inset-right));
+    }
+  }
+}
