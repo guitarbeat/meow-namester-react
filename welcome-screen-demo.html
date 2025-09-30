@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Screen - Light & Dark Mode Demo</title>
+    <style>
+        /* Import the theme variables and global styles */
+        @import url('./src/shared/styles/theme.css');
+        @import url('./src/shared/styles/global.css');
+        @import url('./src/shared/components/WelcomeScreen/WelcomeScreen.module.css');
+        
+        /* Demo page specific styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+            background: var(--background-color);
+            color: var(--text-primary);
+            transition: background-color var(--transition-theme), color var(--transition-theme);
+        }
+        
+        .demo-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .demo-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem;
+            background: var(--card-background);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .theme-toggle {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .theme-button {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--card-background);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-theme);
+            font-weight: 500;
+        }
+        
+        .theme-button:hover {
+            background: var(--card-hover);
+            border-color: var(--accent-color);
+        }
+        
+        .theme-button.active {
+            background: var(--accent-color);
+            color: var(--charcoal);
+            border-color: var(--accent-color);
+        }
+        
+        .demo-content {
+            flex: 1;
+            padding-top: 80px; /* Account for fixed header */
+        }
+        
+        .welcome-demo {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .welcome-demo.light-theme {
+            background: var(--background-color);
+        }
+        
+        .welcome-demo.dark-theme {
+            background: var(--background-color);
+        }
+        
+        .demo-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+            background: var(--card-background);
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
+        }
+        
+        .demo-info p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Override welcome screen styles for demo */
+        .welcomeWrapper {
+            position: relative !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+        }
+        
+        /* Ensure proper theme application */
+        .light-theme {
+            --text-primary: #f8fafc;
+            --text-secondary: #e2e8f0;
+            --background-color: #334155;
+            --card-background: #475569;
+            --card-border: #64748b;
+            --card-hover: #64748b;
+            --border-color: #64748b;
+        }
+        
+        .dark-theme {
+            --text-primary: #f8fafc;
+            --text-secondary: #e2e8f0;
+            --background-color: #020617;
+            --card-background: #0f172a;
+            --card-border: #1e293b;
+            --card-hover: #1e293b;
+            --border-color: #1e293b;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1 class="demo-title">Welcome Screen Theme Demo</h1>
+            <div class="theme-toggle">
+                <button class="theme-button active" onclick="switchTheme('light')">☀️ Light Mode</button>
+                <button class="theme-button" onclick="switchTheme('dark')">🌙 Dark Mode</button>
+            </div>
+        </div>
+        
+        <div class="demo-content">
+            <div class="welcome-demo light-theme" id="welcomeDemo">
+                <div class="demo-info">
+                    <h3>Welcome Screen Demo</h3>
+                    <p>This demonstrates the welcome screen in both light and dark modes. Use the toggle buttons above to switch between themes.</p>
+                </div>
+                
+                <!-- Welcome Screen Component -->
+                <div class="welcomeWrapper visible">
+                    <!-- Background with overlay -->
+                    <div class="backgroundContainer">
+                        <div class="backgroundImage"></div>
+                        <div class="overlay"></div>
+                        
+                        <!-- Particle effects -->
+                        <div class="particleContainer">
+                            <div class="particle" style="left: 100px; top: 150px; width: 4px; height: 4px; opacity: 0.3;"></div>
+                            <div class="particle" style="left: 300px; top: 200px; width: 3px; height: 3px; opacity: 0.2;"></div>
+                            <div class="particle" style="left: 500px; top: 100px; width: 5px; height: 5px; opacity: 0.25;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Centered Content Container -->
+                    <div class="contentContainer">
+                        <!-- Cat Image Section -->
+                        <div class="catImageSection">
+                            <div class="catImageContainer">
+                                <img
+                                    src="/assets/images/IMG_0778.jpg"
+                                    alt="My cat looking adorable"
+                                    class="catImage"
+                                    loading="lazy"
+                                />
+                                <div class="catImageGlow"></div>
+                            </div>
+                        </div>
+
+                        <!-- Rotated Card Layout -->
+                        <div class="rotatedCard">
+                            <!-- Header -->
+                            <div class="cardHeader">
+                                <span class="headerText">Hello! My name is</span>
+                            </div>
+                            
+                            <!-- Cat Name - Most Prominent -->
+                            <div class="catNameSection">
+                                <div class="catNameContainer">
+                                    <span class="catNameText">Whiskers McFluffy</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div class="cardFooter">
+                                <span class="footerText">Welcome to my personal site!</span>
+                            </div>
+                        </div>
+                    
+                        <!-- Continue Button -->
+                        <div class="actionSection">
+                            <button class="continueButton" onclick="alert('Continue clicked!')">
+                                <span class="buttonContent">
+                                    <span class="buttonText">Continue to login screen</span>
+                                    <span class="buttonEmoji" aria-hidden="true">🚀</span>
+                                </span>
+                            </button>
+                            <div class="explanationText">
+                                <p>Click to start your cat name judging adventure!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTheme(theme) {
+            const body = document.body;
+            const welcomeDemo = document.getElementById('welcomeDemo');
+            const buttons = document.querySelectorAll('.theme-button');
+            
+            // Remove existing theme classes
+            body.classList.remove('light-theme', 'dark-theme');
+            welcomeDemo.classList.remove('light-theme', 'dark-theme');
+            
+            // Add new theme class
+            body.classList.add(theme + '-theme');
+            welcomeDemo.classList.add(theme + '-theme');
+            
+            // Update button states
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update meta theme-color for mobile browsers
+            let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (!metaThemeColor) {
+                metaThemeColor = document.createElement('meta');
+                metaThemeColor.name = 'theme-color';
+                document.head.appendChild(metaThemeColor);
+            }
+            metaThemeColor.content = theme === 'light' ? '#334155' : '#1a1f2e';
+        }
+        
+        // Initialize with light theme
+        document.addEventListener('DOMContentLoaded', function() {
+            switchTheme('light');
+        });
+    </script>
+</body>
+</html>

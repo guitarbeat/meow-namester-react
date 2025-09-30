@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Screen - Light vs Dark Mode Comparison</title>
+    <style>
+        /* Import theme variables */
+        :root {
+            /* Light theme variables */
+            --light-bg: #334155;
+            --light-card: #475569;
+            --light-text: #f8fafc;
+            --light-text-secondary: #e2e8f0;
+            --light-border: #64748b;
+            --light-accent: #e8bf76;
+            --light-shadow: 0 4px 12px rgb(0 0 0 / 35%);
+            
+            /* Dark theme variables */
+            --dark-bg: #020617;
+            --dark-card: #0f172a;
+            --dark-text: #f8fafc;
+            --dark-text-secondary: #e2e8f0;
+            --dark-border: #1e293b;
+            --dark-accent: #e8bf76;
+            --dark-shadow: 0 4px 12px rgb(0 0 0 / 35%);
+            
+            /* Common variables */
+            --transition: 0.3s ease;
+            --radius: 0.75rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .comparison-container {
+            display: flex;
+            min-height: 100vh;
+            gap: 2px;
+        }
+        
+        .theme-panel {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .light-panel {
+            background: var(--light-bg);
+            color: var(--light-text);
+        }
+        
+        .dark-panel {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+        }
+        
+        .theme-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: var(--light-card);
+            color: var(--light-text);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            box-shadow: var(--light-shadow);
+        }
+        
+        .dark-panel .theme-label {
+            background: var(--dark-card);
+            color: var(--dark-text);
+            box-shadow: var(--dark-shadow);
+        }
+        
+        .welcome-demo {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+        
+        .welcome-content {
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .cat-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 2rem;
+            display: block;
+            object-fit: cover;
+        }
+        
+        .rotated-card {
+            background: #fff;
+            border-radius: 1em;
+            padding: 0;
+            box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px, inset rgba(0, 0, 0, 0.2) 0 0 50px;
+            transform: rotate(-3deg);
+            transition: transform 0.3s ease;
+            margin: 2rem auto;
+            max-width: 400px;
+        }
+        
+        .rotated-card:hover {
+            transform: rotate(-1deg) scale(1.02);
+        }
+        
+        .card-header {
+            background: rgba(254, 56, 56, 0.8);
+            color: white;
+            border-radius: 1em 1em 0 0;
+            padding: 0.8em 1em;
+            text-align: center;
+        }
+        
+        .header-text {
+            font-size: clamp(1.1em, 2.5vw, 1.4em);
+            letter-spacing: 0.2em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .cat-name-section {
+            padding: 0.1em 0;
+            text-align: center;
+            background: #fff;
+            min-height: auto;
+        }
+        
+        .cat-name-container {
+            font-family: 'Waiting for the Sunrise', cursive;
+            color: #000;
+            font-size: clamp(0.9em, 2.2vw, 1.3em);
+            transform: rotate(-3deg);
+            line-height: 1.1;
+            padding: 0.6em 1em;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.05em;
+            max-width: 100%;
+            overflow: visible;
+            min-height: 2em;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .cat-name-text {
+            display: inline;
+            font-family: 'Waiting for the Sunrise', cursive;
+            font-size: 1em;
+            font-weight: 400;
+            line-height: 1.1;
+            color: #000;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            text-transform: capitalize;
+            letter-spacing: 0.05em;
+            white-space: normal;
+        }
+        
+        .card-footer {
+            background: rgba(254, 56, 56, 0.8);
+            border-radius: 0 0 1em 1em;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: clamp(0.6em, 1.5vw, 0.8em);
+            font-weight: bold;
+            padding: 0.8em 1em;
+            text-align: center;
+        }
+        
+        .action-section {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem auto 0;
+            padding: 1.5rem;
+            overflow: hidden;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .continue-button {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            padding: 1rem 2rem;
+            margin: 1rem auto;
+            overflow: hidden;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226);
+            border: 2px solid transparent;
+            border-radius: 1rem;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+            text-transform: none;
+            letter-spacing: 0.5px;
+        }
+        
+        .continue-button:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 30px rgba(231, 76, 60, 0.6), 0 0 20px rgba(231, 76, 60, 0.3);
+            transform: translateY(-4px) scale(1.02);
+        }
+        
+        .button-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .explanation-text {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.08), rgba(232, 191, 118, 0.08));
+            border: 1px solid rgba(52, 152, 219, 0.25);
+            border-radius: 0.75rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .explanation-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #2c3e40;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+        
+        .comparison-info {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        
+        .comparison-info h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        
+        .comparison-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile responsiveness */
+        @media (width <= 768px) {
+            .comparison-container {
+                flex-direction: column;
+            }
+            
+            .theme-panel {
+                min-height: 50vh;
+            }
+            
+            .comparison-info {
+                position: relative;
+                top: 0;
+                left: 0;
+                transform: none;
+                margin: 1rem;
+                width: auto;
+            }
+            
+            .welcome-demo {
+                padding: 1rem;
+            }
+            
+            .rotated-card {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="comparison-info">
+        <h1>Welcome Screen Theme Comparison</h1>
+        <p>Side-by-side comparison of the welcome screen in light and dark modes</p>
+    </div>
+    
+    <div class="comparison-container">
+        <!-- Light Theme Panel -->
+        <div class="theme-panel light-panel">
+            <div class="theme-label">☀️ Light Mode</div>
+            <div class="welcome-demo">
+                <div class="welcome-content">
+                    <img src="/assets/images/IMG_0778.jpg" alt="Cat" class="cat-image" />
+                    
+                    <div class="rotated-card">
+                        <div class="card-header">
+                            <span class="header-text">Hello! My name is</span>
+                        </div>
+                        
+                        <div class="cat-name-section">
+                            <div class="cat-name-container">
+                                <span class="cat-name-text">Whiskers McFluffy</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <span>Welcome to my personal site!</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-section">
+                        <button class="continue-button">
+                            <span class="button-content">
+                                <span>Continue to login screen</span>
+                                <span>🚀</span>
+                            </span>
+                        </button>
+                        <div class="explanation-text">
+                            <p>Click to start your cat name judging adventure!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dark Theme Panel -->
+        <div class="theme-panel dark-panel">
+            <div class="theme-label">🌙 Dark Mode</div>
+            <div class="welcome-demo">
+                <div class="welcome-content">
+                    <img src="/assets/images/IMG_0778.jpg" alt="Cat" class="cat-image" />
+                    
+                    <div class="rotated-card">
+                        <div class="card-header">
+                            <span class="header-text">Hello! My name is</span>
+                        </div>
+                        
+                        <div class="cat-name-section">
+                            <div class="cat-name-container">
+                                <span class="cat-name-text">Whiskers McFluffy</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <span>Welcome to my personal site!</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-section">
+                        <button class="continue-button">
+                            <span class="button-content">
+                                <span>Continue to login screen</span>
+                                <span>🚀</span>
+                            </span>
+                        </button>
+                        <div class="explanation-text">
+                            <p>Click to start your cat name judging adventure!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
